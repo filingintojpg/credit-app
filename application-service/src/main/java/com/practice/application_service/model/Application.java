@@ -26,7 +26,7 @@ public class Application {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employment_id", nullable = false)
-    private EmploymentRecord employment;
+    private Employment employment;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -43,6 +43,6 @@ public class Application {
     public Passport getPassport() { return passport; }
     public void setPassport(Passport passport) { this.passport = passport; }
 
-    public EmploymentRecord getEmployment() { return employment; }
-    public void setEmployment(EmploymentRecord employment) { this.employment = employment; }
+    public Employment getEmployment() { return employment; }
+    public void setEmployment(Employment employment) { this.employment = employment; }
 }
