@@ -31,6 +31,7 @@ public class ApplicationRequest {
     private String address;
 
     @NotBlank
+    @Pattern(regexp = "\\d{10,15}")
     private String phone;
 
     @NotBlank
