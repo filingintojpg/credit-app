@@ -2,6 +2,7 @@ package com.practice.application_service.repository;
 
 import com.practice.application_service.model.Passport;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -19,6 +20,16 @@ public class PassportRepository {
             session.persist(passport);
             transaction.commit();
             return passport;
+        }
+    }
+
+    public Passport findBySeriesAndNumber(String series, String number) {
+        try (var session = sessionFactory.openSession()) {
+            Query<Passport> query = session.createQuery(
+                    "FROM Passport p WHERE p.series = :series AND p.number = :number", Passport.class);
+            query.setParameter("series", series);
+            query.setParameter("number", number);
+            return query.uniqueResultOptional().orElse(null);
         }
     }
 }
