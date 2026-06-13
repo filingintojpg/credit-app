@@ -20,8 +20,8 @@ public class Decision {
     @Column(name = "status", nullable = false)
     private DecisionStatus status;
 
-    @Column(name = "decided_at", nullable = false)
-    private LocalDateTime decidedAt;
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -32,6 +32,6 @@ public class Decision {
     public DecisionStatus getStatus() { return status; }
     public void setStatus(DecisionStatus status) { this.status = status; }
 
-    public LocalDateTime getDecidedAt() { return decidedAt; }
-    public void setDecidedAt(LocalDateTime decidedAt) { this.decidedAt = decidedAt; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }

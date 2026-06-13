@@ -70,7 +70,7 @@ public class ApplicationService {
         Decision decision = new Decision();
         decision.setApplication(application);
         decision.setStatus(DecisionStatus.PENDING);
-        decision.setDecidedAt(LocalDateTime.now());
+        decision.setUpdatedAt(LocalDateTime.now());
         decisionRepository.save(decision);
 
         return new ApplicationStatusResponse(application.getId(), DecisionStatus.PENDING.name());
