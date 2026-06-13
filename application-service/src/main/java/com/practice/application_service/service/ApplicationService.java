@@ -14,6 +14,7 @@ import com.practice.application_service.repository.EmploymentRepository;
 import com.practice.application_service.repository.PassportRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -66,6 +67,12 @@ public class ApplicationService {
         application.setEmployment(employment);
         applicationRepository.save(application);
 
+        Decision decision = new Decision();
+        decision.setApplication(application);
+        decision.setStatus(DecisionStatus.PENDING);
+        decision.setDecidedAt(LocalDateTime.now());
+        decisionRepository.save(decision);
+
         return new ApplicationStatusResponse(application.getId(), DecisionStatus.PENDING.name());
     }
 
@@ -77,24 +84,14 @@ public class ApplicationService {
         }
 
         Decision decision = decisionRepository.findByApplicationId(applicationId);
-        String status = (decision != null)
-                ? decision.getStatus().name()
-                : DecisionStatus.PENDING.name();
+        String status = decision.getStatus().name();
 
         return new ApplicationStatusResponse(applicationId, status);
     }
 
     public PagedResponse<ApplicationDetailsResponse> getApplications(ApplicationFilter filter) {
         List<ApplicationDetailsResponse> items = applicationRepository.findWithFilters(filter);
-
-        for (ApplicationDetailsResponse item : items) {
-            if (item.getStatus() == null) {
-                item.setStatus(DecisionStatus.PENDING);
-            }
-        }
-
         long total = applicationRepository.countWithFilters(filter);
-
         return new PagedResponse<>(items, filter.getPage(), filter.getSize(), total);
     }
 }

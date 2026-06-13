@@ -14,6 +14,15 @@ public class DecisionRepository {
         this.sessionFactory = sessionFactory;
     }
 
+    public Decision save(Decision decision) {
+        try (var session = sessionFactory.openSession()) {
+            var transaction = session.beginTransaction();
+            session.persist(decision);
+            transaction.commit();
+            return decision;
+        }
+    }
+
     public Decision findByApplicationId(Long applicationId) {
         try (var session = sessionFactory.openSession()) {
             Query<Decision> query = session.createQuery(

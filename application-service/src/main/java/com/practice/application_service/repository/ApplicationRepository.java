@@ -45,7 +45,7 @@ public class ApplicationRepository {
             FROM Application a
             JOIN a.passport p
             JOIN a.employment e
-            LEFT JOIN Decision d ON d.application = a
+            JOIN Decision d ON d.application = a
             WHERE 1=1
             """);
 
@@ -91,7 +91,7 @@ public class ApplicationRepository {
             FROM Application a
             JOIN a.passport p
             JOIN a.employment e
-            LEFT JOIN Decision d ON d.application = a
+            JOIN Decision d ON d.application = a
             WHERE 1=1
             """);
 
