@@ -3,6 +3,7 @@ package com.practice.application_service.service;
 import com.practice.application_service.dto.*;
 import com.practice.application_service.dto.util.ApplicationFilter;
 import com.practice.application_service.dto.util.PagedResponse;
+import com.practice.application_service.exception.ApplicationNotFoundException;
 import com.practice.application_service.model.Application;
 import com.practice.application_service.model.Decision;
 import com.practice.application_service.model.Employment;
@@ -80,7 +81,7 @@ public class ApplicationService {
         Application application = applicationRepository.findById(applicationId);
 
         if (application == null) {
-            throw new IllegalArgumentException("Application not found: " + applicationId);
+            throw new ApplicationNotFoundException(applicationId);
         }
 
         Decision decision = decisionRepository.findByApplicationId(applicationId);
