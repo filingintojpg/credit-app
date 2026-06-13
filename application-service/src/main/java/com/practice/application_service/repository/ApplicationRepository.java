@@ -39,7 +39,6 @@ public class ApplicationRepository {
             SELECT new com.practice.application_service.dto.ApplicationDetailsResponse(
                 a.id, a.phone, a.moneyAmount, a.term,
                 d.status, d.updatedAt,
-                a.id, a.phone, a.moneyAmount, a.term, d.status,
                 p.lastName, p.firstName, p.middleName,
                 p.series, p.number, p.address, p.maritalStatus,
                 e.organization, e.position, e.employedAt, e.dismissedAt
