@@ -38,7 +38,7 @@ CREATE TABLE client_applications
 CREATE TABLE system_decisions
 (
     id             BIGSERIAL PRIMARY KEY,
-    application_id BIGINT      NOT NULL REFERENCES client_applications (id),
+    application_id BIGINT      NOT NULL UNIQUE REFERENCES client_applications (id),
     status         VARCHAR(20) NOT NULL,
     decided_at     TIMESTAMP   NOT NULL
 );

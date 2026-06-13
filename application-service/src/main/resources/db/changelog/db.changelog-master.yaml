@@ -2,3 +2,15 @@ databaseChangeLog:
   - include:
       file: 001-create-tables.sql
       relativeToChangelogFile: true
+
+  - include:
+      file: 002-rename-to-employments.sql
+      relativeToChangelogFile: true
+
+  - include:
+      file: 003-unique-passport-and-employment.sql
+      relativeToChangelogFile: true
+
+  - include:
+      file: 004-rename-to-decision-updated-at.sql
+      relativeToChangelogFile: true
