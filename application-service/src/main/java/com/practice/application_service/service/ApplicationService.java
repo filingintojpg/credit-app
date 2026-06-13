@@ -1,7 +1,8 @@
 package com.practice.application_service.service;
 
-import com.practice.application_service.dto.ApplicationRequest;
-import com.practice.application_service.dto.ApplicationStatusResponse;
+import com.practice.application_service.dto.*;
+import com.practice.application_service.dto.util.ApplicationFilter;
+import com.practice.application_service.dto.util.PagedResponse;
 import com.practice.application_service.model.Application;
 import com.practice.application_service.model.Decision;
 import com.practice.application_service.model.Employment;
@@ -12,6 +13,8 @@ import com.practice.application_service.repository.DecisionRepository;
 import com.practice.application_service.repository.EmploymentRepository;
 import com.practice.application_service.repository.PassportRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ApplicationService {
@@ -79,5 +82,19 @@ public class ApplicationService {
                 : DecisionStatus.PENDING.name();
 
         return new ApplicationStatusResponse(applicationId, status);
+    }
+
+    public PagedResponse<ApplicationDetailsResponse> getApplications(ApplicationFilter filter) {
+        List<ApplicationDetailsResponse> items = applicationRepository.findWithFilters(filter);
+
+        for (ApplicationDetailsResponse item : items) {
+            if (item.getStatus() == null) {
+                item.setStatus(DecisionStatus.PENDING);
+            }
+        }
+
+        long total = applicationRepository.countWithFilters(filter);
+
+        return new PagedResponse<>(items, filter.getPage(), filter.getSize(), total);
     }
 }
