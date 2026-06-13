@@ -74,7 +74,7 @@ public class ApplicationService {
         decision.setUpdatedAt(LocalDateTime.now());
         decisionRepository.save(decision);
 
-        return new ApplicationStatusResponse(application.getId(), DecisionStatus.PENDING.name());
+        return new ApplicationStatusResponse(application.getId(), decision.getStatus().name());
     }
 
     public ApplicationStatusResponse getStatus(Long applicationId) {
