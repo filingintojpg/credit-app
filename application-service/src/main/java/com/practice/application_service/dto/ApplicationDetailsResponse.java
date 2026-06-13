@@ -5,6 +5,7 @@ import com.practice.application_service.model.enums.MaritalStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class ApplicationDetailsResponse {
 
@@ -14,6 +15,7 @@ public class ApplicationDetailsResponse {
     private BigDecimal amount;
     private Integer term;
     private DecisionStatus status;
+    private LocalDateTime updatedAt;
 
     private String lastName;
     private String firstName;
@@ -28,7 +30,8 @@ public class ApplicationDetailsResponse {
     private LocalDate employedAt;
     private LocalDate dismissedAt;
 
-    public ApplicationDetailsResponse(Long applicationId, String phone, BigDecimal amount, Integer term, DecisionStatus status,
+    public ApplicationDetailsResponse(Long applicationId, String phone, BigDecimal amount, Integer term,
+                              DecisionStatus status, LocalDateTime updatedAt,
                               String lastName, String firstName, String middleName,
                               String passportSeries, String passportNumber, String address, MaritalStatus maritalStatus,
                               String organization, String position, LocalDate employedAt, LocalDate dismissedAt) {
@@ -37,6 +40,7 @@ public class ApplicationDetailsResponse {
         this.amount = amount;
         this.term = term;
         this.status = status;
+        this.updatedAt = updatedAt;
         this.lastName = lastName;
         this.firstName = firstName;
         this.middleName = middleName;
@@ -64,6 +68,9 @@ public class ApplicationDetailsResponse {
 
     public DecisionStatus getStatus() { return status; }
     public void setStatus(DecisionStatus status) { this.status = status; }
+
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 
     public String getLastName() { return lastName; }
     public void setLastName(String lastName) { this.lastName = lastName; }
