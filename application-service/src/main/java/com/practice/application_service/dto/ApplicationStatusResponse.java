@@ -1,11 +1,11 @@
 package com.practice.application_service.dto;
 
-public class ApplicationResponse {
+public class ApplicationStatusResponse {
 
     private Long applicationId;
     private String status;
 
-    public ApplicationResponse(Long applicationId, String status) {
+    public ApplicationStatusResponse(Long applicationId, String status) {
         this.applicationId = applicationId;
         this.status = status;
     }

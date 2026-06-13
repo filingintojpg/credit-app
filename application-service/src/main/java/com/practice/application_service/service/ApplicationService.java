@@ -1,7 +1,7 @@
 package com.practice.application_service.service;
 
 import com.practice.application_service.dto.ApplicationRequest;
-import com.practice.application_service.dto.ApplicationResponse;
+import com.practice.application_service.dto.ApplicationStatusResponse;
 import com.practice.application_service.model.Application;
 import com.practice.application_service.model.Decision;
 import com.practice.application_service.model.Employment;
@@ -31,7 +31,7 @@ public class ApplicationService {
         this.decisionRepository = decisionRepository;
     }
 
-    public ApplicationResponse createApplication(ApplicationRequest request) {
+    public ApplicationStatusResponse createApplication(ApplicationRequest request) {
         Passport passport = passportRepository.findBySeriesAndNumber(request.getPassportSeries(), request.getPassportNumber());
         if (passport == null) {
             passport = new Passport();
@@ -63,10 +63,10 @@ public class ApplicationService {
         application.setEmployment(employment);
         applicationRepository.save(application);
 
-        return new ApplicationResponse(application.getId(), DecisionStatus.PENDING.name());
+        return new ApplicationStatusResponse(application.getId(), DecisionStatus.PENDING.name());
     }
 
-    public ApplicationResponse getStatus(Long applicationId) {
+    public ApplicationStatusResponse getStatus(Long applicationId) {
         Application application = applicationRepository.findById(applicationId);
 
         if (application == null) {
@@ -78,6 +78,6 @@ public class ApplicationService {
                 ? decision.getStatus().name()
                 : DecisionStatus.PENDING.name();
 
-        return new ApplicationResponse(applicationId, status);
+        return new ApplicationStatusResponse(applicationId, status);
     }
 }
