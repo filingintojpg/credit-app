@@ -24,6 +24,7 @@ public class ApplicationDetailsResponse {
     private String passportNumber;
     private String address;
     private MaritalStatus maritalStatus;
+    private LocalDate birthDate;
 
     private String organization;
     private String position;
@@ -33,7 +34,7 @@ public class ApplicationDetailsResponse {
     public ApplicationDetailsResponse(Long applicationId, String phone, BigDecimal amount, Integer term,
                               DecisionStatus status, LocalDateTime updatedAt,
                               String lastName, String firstName, String middleName,
-                              String passportSeries, String passportNumber, String address, MaritalStatus maritalStatus,
+                              String passportSeries, String passportNumber, String address, MaritalStatus maritalStatus, LocalDate birthDate,
                               String organization, String position, LocalDate employedAt, LocalDate dismissedAt) {
         this.applicationId = applicationId;
         this.phone = phone;
@@ -48,6 +49,7 @@ public class ApplicationDetailsResponse {
         this.passportNumber = passportNumber;
         this.address = address;
         this.maritalStatus = maritalStatus;
+        this.birthDate = birthDate;
         this.organization = organization;
         this.position = position;
         this.employedAt = employedAt;
@@ -92,6 +94,9 @@ public class ApplicationDetailsResponse {
 
     public MaritalStatus getMaritalStatus() { return maritalStatus; }
     public void setMaritalStatus(MaritalStatus maritalStatus) { this.maritalStatus = maritalStatus; }
+
+    public LocalDate getBirthDate() { return birthDate; }
+    public void setBirthDate(LocalDate birthDate) { this.birthDate = birthDate; }
 
     public String getOrganization() { return organization; }
     public void setOrganization(String organization) { this.organization = organization; }

@@ -40,7 +40,7 @@ public class ApplicationRepository {
                 a.id, a.phone, a.moneyAmount, a.term,
                 d.status, d.updatedAt,
                 p.lastName, p.firstName, p.middleName,
-                p.series, p.number, p.address, p.maritalStatus,
+                p.series, p.number, p.address, p.maritalStatus, p.birthDate,
                 e.organization, e.position, e.employedAt, e.dismissedAt
             )
             FROM Application a
