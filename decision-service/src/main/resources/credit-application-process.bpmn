@@ -10,7 +10,7 @@
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_0z45fzy" sourceRef="start" targetRef="validateApplication" />
     <bpmn:sequenceFlow id="Flow_1754rnt" sourceRef="validateApplication" targetRef="checkConditions" />
-    <bpmn:exclusiveGateway id="checkConditions" name="Conditions met?">
+    <bpmn:exclusiveGateway id="checkConditions" name="Suits?">
       <bpmn:incoming>Flow_1754rnt</bpmn:incoming>
       <bpmn:outgoing>Flow_0zdccoz</bpmn:outgoing>
       <bpmn:outgoing>Flow_154a8lv</bpmn:outgoing>
@@ -51,7 +51,7 @@
       <bpmndi:BPMNShape id="Gateway_1dilsy4_di" bpmnElement="checkConditions" isMarkerVisible="true">
         <dc:Bounds x="415" y="155" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="475" y="173" width="80" height="14" />
+          <dc:Bounds x="474" y="173" width="31" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0wf93tq_di" bpmnElement="approveApplication">
@@ -63,9 +63,9 @@
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0l2wz6i_di" bpmnElement="end">
-        <dc:Bounds x="652" y="162" width="36" height="36" />
+        <dc:Bounds x="692" y="162" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="587" y="170" width="20" height="14" />
+          <dc:Bounds x="700" y="205" width="20" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0z45fzy_di" bpmnElement="Flow_0z45fzy">
@@ -79,12 +79,14 @@
       <bpmndi:BPMNEdge id="Flow_0w90upv_di" bpmnElement="Flow_0w90upv">
         <di:waypoint x="610" y="120" />
         <di:waypoint x="670" y="120" />
-        <di:waypoint x="670" y="162" />
+        <di:waypoint x="670" y="180" />
+        <di:waypoint x="692" y="180" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1kzpb4g_di" bpmnElement="Flow_1kzpb4g">
         <di:waypoint x="610" y="240" />
         <di:waypoint x="670" y="240" />
-        <di:waypoint x="670" y="198" />
+        <di:waypoint x="670" y="180" />
+        <di:waypoint x="692" y="180" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0zdccoz_di" bpmnElement="Flow_0zdccoz">
         <di:waypoint x="440" y="155" />
