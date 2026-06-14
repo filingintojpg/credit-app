@@ -14,3 +14,7 @@ databaseChangeLog:
   - include:
       file: 004-rename-to-decision-updated-at.sql
       relativeToChangelogFile: true
+
+  - include:
+      file: 005-add-birth-date-to-passport.sql
+      relativeToChangelogFile: true
