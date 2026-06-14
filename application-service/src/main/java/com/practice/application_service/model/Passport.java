@@ -3,6 +3,8 @@ package com.practice.application_service.model;
 import com.practice.application_service.model.enums.MaritalStatus;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "client_passports")
 public class Passport {
@@ -33,6 +35,9 @@ public class Passport {
     @Column(name = "marital_status", nullable = false)
     private MaritalStatus maritalStatus;
 
+    @Column(name = "birth_date", nullable = false)
+    private LocalDate birthDate;
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -56,4 +61,7 @@ public class Passport {
 
     public MaritalStatus getMaritalStatus() { return maritalStatus; }
     public void setMaritalStatus(MaritalStatus maritalStatus) { this.maritalStatus = maritalStatus; }
+
+    public LocalDate getBirthDate() { return birthDate; }
+    public void setBirthDate(LocalDate birthDate) { this.birthDate = birthDate; }
 }
