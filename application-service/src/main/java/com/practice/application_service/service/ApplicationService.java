@@ -47,6 +47,7 @@ public class ApplicationService {
             passport.setNumber(request.getPassportNumber());
             passport.setAddress(request.getAddress());
             passport.setMaritalStatus(request.getMaritalStatus());
+            passport.setBirthDate(request.getBirthDate());
             passportRepository.save(passport);
         }
 

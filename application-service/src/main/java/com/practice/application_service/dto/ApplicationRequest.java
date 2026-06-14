@@ -27,6 +27,9 @@ public class ApplicationRequest {
     @NotNull
     private MaritalStatus maritalStatus;
 
+    @NotNull
+    private LocalDate birthDate;
+
     @NotBlank
     private String address;
 
@@ -70,6 +73,9 @@ public class ApplicationRequest {
 
     public MaritalStatus getMaritalStatus() { return maritalStatus; }
     public void setMaritalStatus(MaritalStatus maritalStatus) { this.maritalStatus = maritalStatus; }
+
+    public LocalDate getBirthDate() { return birthDate; }
+    public void setBirthDate(LocalDate birthDate) { this.birthDate = birthDate; }
 
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
