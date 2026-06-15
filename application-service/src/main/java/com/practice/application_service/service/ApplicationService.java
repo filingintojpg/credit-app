@@ -1,5 +1,6 @@
 package com.practice.application_service.service;
 
+import com.practice.application_service.client.CamundaClient;
 import com.practice.application_service.dto.*;
 import com.practice.application_service.dto.util.ApplicationFilter;
 import com.practice.application_service.dto.util.PagedResponse;
@@ -26,14 +27,18 @@ public class ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final DecisionRepository decisionRepository;
 
+    private final CamundaClient camundaClient;
+
     public ApplicationService(PassportRepository passportRepository,
                               EmploymentRepository employmentRepository,
                               ApplicationRepository applicationRepository,
-                              DecisionRepository decisionRepository) {
+                              DecisionRepository decisionRepository,
+                              CamundaClient camundaClient) {
         this.passportRepository = passportRepository;
         this.employmentRepository = employmentRepository;
         this.applicationRepository = applicationRepository;
         this.decisionRepository = decisionRepository;
+        this.camundaClient = camundaClient;
     }
 
     public ApplicationStatusResponse createApplication(ApplicationRequest request) {
@@ -74,6 +79,8 @@ public class ApplicationService {
         decision.setStatus(DecisionStatus.PENDING);
         decision.setUpdatedAt(LocalDateTime.now());
         decisionRepository.save(decision);
+
+        camundaClient.startCreditApplicationProcess(application.getId());
 
         return new ApplicationStatusResponse(application.getId(), decision.getStatus().name());
     }
