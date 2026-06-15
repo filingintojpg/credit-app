@@ -2,4 +2,4 @@
 1. Copy .env.example to .env
 2. Add environment variables from .env to IntelliJ Run Configurations for both services
 3. Run: docker-compose up -d
-4. Run the application
+4. Run: application and decision services
