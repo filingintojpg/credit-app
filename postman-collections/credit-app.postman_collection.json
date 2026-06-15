@@ -1,0 +1,410 @@
+{
+  "info": {
+    "_postman_id": "7dd5a474-675b-49c2-90a8-d6061a2f608e",
+    "name": "credit-app",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "55930302",
+    "_collection_link": "https://go.postman.co/collection/55930302-7dd5a474-675b-49c2-90a8-d6061a2f608e?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "approvedRequest",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"lastName\": \"Иванов\",\r\n  \"firstName\": \"Иван\",\r\n  \"middleName\": \"Иванович\",\r\n  \"passportSeries\": \"1234\",\r\n  \"passportNumber\": \"567890\",\r\n  \"maritalStatus\": \"MARRIED\",\r\n  \"address\": \"Москва, ул. Ленина 1\",\r\n  \"phone\": \"79991111111\",\r\n  \"organization\": \"ООО Ромашка\",\r\n  \"position\": \"Менеджер\",\r\n  \"employedAt\": \"2020-01-15\",\r\n  \"amount\": 15000,\r\n  \"term\": 14,\r\n  \"birthDate\": \"1990-05-20\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/application",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "application"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "rejectedRequest",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"lastName\": \"Петров\",\r\n  \"firstName\": \"Пётр\",\r\n  \"middleName\": \"Петрович\",\r\n  \"passportSeries\": \"5555\",\r\n  \"passportNumber\": \"111222\",\r\n  \"maritalStatus\": \"SINGLE\",\r\n  \"address\": \"СПб, Невский 10\",\r\n  \"phone\": \"79992222222\",\r\n  \"organization\": \"ИП Сидоров\",\r\n  \"position\": \"Курьер\",\r\n  \"employedAt\": \"2021-05-01\",\r\n  \"amount\": 50000,\r\n  \"term\": 10,\r\n  \"birthDate\": \"1985-03-15\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/application",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "application"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "samePersonDataRequest",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"lastName\": \"Иванов\",\r\n  \"firstName\": \"Иван\",\r\n  \"middleName\": \"Иванович\",\r\n  \"passportSeries\": \"1234\",\r\n  \"passportNumber\": \"567890\",\r\n  \"maritalStatus\": \"MARRIED\",\r\n  \"address\": \"Москва, ул. Ленина 1\",\r\n  \"phone\": \"79991111111\",\r\n  \"organization\": \"ООО Ромашка\",\r\n  \"position\": \"Менеджер\",\r\n  \"employedAt\": \"2020-01-15\",\r\n  \"amount\": 500,\r\n  \"term\": 1,\r\n  \"birthDate\": \"1990-05-20\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/application",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "application"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "approvedApplicationStatus",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/application/1/status",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "application",
+            "1",
+            "status"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "rejectedApplicationStatus",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/application/2/status",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "application",
+            "2",
+            "status"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "samePersonDataApplicationStatus",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/application/3/status",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "application",
+            "3",
+            "status"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "applicationsList",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/application",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "application"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "nonExistingApplicationStatus",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/application/9999/status",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "application",
+            "9999",
+            "status"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "filterOnlyApproved",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/application?statuses=APPROVED",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "application"
+          ],
+          "query": [
+            {
+              "key": "statuses",
+              "value": "APPROVED"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "filterOnlyRejected",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/application?statuses=REJECTED",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "application"
+          ],
+          "query": [
+            {
+              "key": "statuses",
+              "value": "REJECTED"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "filterApprovedOrRejected",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/application?statuses=APPROVED&statuses=REJECTED",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "application"
+          ],
+          "query": [
+            {
+              "key": "statuses",
+              "value": "APPROVED"
+            },
+            {
+              "key": "statuses",
+              "value": "REJECTED"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "filterAmount",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/application?amount=500",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "application"
+          ],
+          "query": [
+            {
+              "key": "amount",
+              "value": "500"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "filterTerm",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/application?term=10",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "application"
+          ],
+          "query": [
+            {
+              "key": "term",
+              "value": "10"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "filterPhone",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/application?phone=79991111111",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "application"
+          ],
+          "query": [
+            {
+              "key": "phone",
+              "value": "79991111111"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "firstSizedApplicationsPage",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/application?page=0&size=2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "application"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "secondSizedApplicationsPage",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/application?page=1&size=2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "application"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "size",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
