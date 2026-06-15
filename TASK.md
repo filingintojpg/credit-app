@@ -47,3 +47,4 @@ GET /application/${applicationId}/status - получения статуса п�
 * PostgreSQL
 * Camunda 7
 * Liquibase
+* Docker
