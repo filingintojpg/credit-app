@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  postgres:
+  database:
     image: postgres:18
     container_name: postgres-container
     environment:
@@ -22,10 +22,10 @@ services:
       dockerfile: Dockerfile
     container_name: application-service
     ports:
-      - "${APPLICATION_SERVICE_PORT}:${APPLICATION_SERVICE_PORT}"
+      - "${APPLICATION_SERVICE_HOST_PORT}:${APPLICATION_SERVICE_CONTAINER_PORT}"
     environment:
-      APPLICATION_SERVICE_PORT: ${APPLICATION_SERVICE_PORT}
-      DB_HOST: ${DB_HOST}
+      APPLICATION_SERVICE_PORT: ${APPLICATION_SERVICE_CONTAINER_PORT}
+      DB_HOST: ${DB_SERVICE_CONTAINER}
       DB_PORT: ${DB_PORT}
       DB_NAME: ${DB_NAME}
       DB_USERNAME: ${DB_USERNAME}
@@ -34,7 +34,7 @@ services:
       CAMUNDA_USERNAME: ${CAMUNDA_USERNAME}
       CAMUNDA_PASSWORD: ${CAMUNDA_PASSWORD}
     depends_on:
-      postgres:
+      database:
         condition: service_healthy
       decision-service:
         condition: service_started
@@ -45,10 +45,10 @@ services:
       dockerfile: Dockerfile
     container_name: decision-service
     ports:
-      - "${DECISION_SERVICE_PORT}:${DECISION_SERVICE_PORT}"
+      - "${DECISION_SERVICE_HOST_PORT}:${DECISION_SERVICE_CONTAINER_PORT}"
     environment:
-      DECISION_SERVICE_PORT: ${DECISION_SERVICE_PORT}
-      DB_HOST: ${DB_HOST}
+      DECISION_SERVICE_PORT: ${DECISION_SERVICE_CONTAINER_PORT}
+      DB_HOST: ${DB_SERVICE_CONTAINER}
       DB_PORT: ${DB_PORT}
       DB_NAME: ${DB_NAME}
       DB_USERNAME: ${DB_USERNAME}
@@ -56,5 +56,5 @@ services:
       CAMUNDA_USERNAME: ${CAMUNDA_USERNAME}
       CAMUNDA_PASSWORD: ${CAMUNDA_PASSWORD}
     depends_on:
-      postgres:
+      database:
         condition: service_healthy
