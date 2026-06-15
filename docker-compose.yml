@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "${DB_PORT}:5432"
+      - "${DB_PORT}:${DB_PORT}"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_NAME}"]
       interval: 5s
@@ -22,14 +22,15 @@ services:
       dockerfile: Dockerfile
     container_name: application-service
     ports:
-      - "${APPLICATION_SERVICE_PORT}:8080"
+      - "${APPLICATION_SERVICE_PORT}:${APPLICATION_SERVICE_PORT}"
     environment:
-      DB_HOST: postgres
-      DB_PORT: 5432
+      APPLICATION_SERVICE_PORT: ${APPLICATION_SERVICE_PORT}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
       DB_NAME: ${DB_NAME}
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
-      CAMUNDA_URL: http://decision-service:${DECISION_SERVICE_PORT}/engine-rest
+      CAMUNDA_URL: ${CAMUNDA_URL}
       CAMUNDA_USERNAME: ${CAMUNDA_USERNAME}
       CAMUNDA_PASSWORD: ${CAMUNDA_PASSWORD}
     depends_on:
@@ -44,13 +45,16 @@ services:
       dockerfile: Dockerfile
     container_name: decision-service
     ports:
-      - "${DECISION_SERVICE_PORT}:8090"
+      - "${DECISION_SERVICE_PORT}:${DECISION_SERVICE_PORT}"
     environment:
-      DB_HOST: postgres
-      DB_PORT: 5432
+      DECISION_SERVICE_PORT: ${DECISION_SERVICE_PORT}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
       DB_NAME: ${DB_NAME}
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
+      CAMUNDA_USERNAME: ${CAMUNDA_USERNAME}
+      CAMUNDA_PASSWORD: ${CAMUNDA_PASSWORD}
     depends_on:
       postgres:
         condition: service_healthy
