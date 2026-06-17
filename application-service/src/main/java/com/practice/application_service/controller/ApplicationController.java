@@ -26,33 +26,17 @@ public class ApplicationController {
 
     @PostMapping
     public ResponseEntity<ApplicationStatusResponse> createApplication(@Valid @RequestBody ApplicationRequest request) {
-        ApplicationStatusResponse response = applicationService.createApplication(request);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(applicationService.createApplication(request));
     }
 
     @GetMapping("/{applicationId}/status")
     public ResponseEntity<ApplicationStatusResponse> getStatus(@PathVariable Long applicationId) {
-        ApplicationStatusResponse response = applicationService.getStatus(applicationId);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(applicationService.getStatus(applicationId));
     }
 
     @GetMapping
     public ResponseEntity<PagedResponse<ApplicationDetailsResponse>> getApplications(
-            @RequestParam(required = false) List<DecisionStatus> statuses,
-            @RequestParam(required = false) BigDecimal amount,
-            @RequestParam(required = false) Integer term,
-            @RequestParam(required = false) String phone,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size) {
-
-        ApplicationFilter filter = new ApplicationFilter();
-        filter.setStatuses(statuses);
-        filter.setAmount(amount);
-        filter.setTerm(term);
-        filter.setPhone(phone);
-        filter.setPage(page);
-        filter.setSize(size);
-
+            @Valid @ModelAttribute ApplicationFilter filter) {
         return ResponseEntity.ok(applicationService.getApplications(filter));
     }
 }

@@ -1,6 +1,10 @@
 package com.practice.application_service.dto.util;
 
 import com.practice.application_service.model.enums.DecisionStatus;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -8,11 +12,21 @@ import java.util.List;
 public class ApplicationFilter {
 
     private List<DecisionStatus> statuses;
+
+    @Positive
     private BigDecimal amount;
+
+    @Positive
     private Integer term;
+
     private String phone;
-    private int page;
-    private int size;
+
+    @PositiveOrZero
+    private int page = 0;
+
+    @Min(1)
+    @Max(100)
+    private int size = 20;
 
     public List<DecisionStatus> getStatuses() { return statuses; }
     public void setStatuses(List<DecisionStatus> statuses) { this.statuses = statuses; }
