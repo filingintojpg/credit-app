@@ -20,7 +20,6 @@ import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -103,8 +102,6 @@ public class ApplicationService {
     }
 
     public PagedResponse<ApplicationDetailsResponse> getApplications(ApplicationFilter filter) {
-        List<ApplicationDetailsResponse> items = applicationRepository.findWithFilters(filter);
-        long total = applicationRepository.countWithFilters(filter);
-        return new PagedResponse<>(items, filter.getPage(), filter.getSize(), total);
+        return applicationRepository.findWithFilters(filter);
     }
 }

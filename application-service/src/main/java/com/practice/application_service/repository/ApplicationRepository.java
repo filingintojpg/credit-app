@@ -2,6 +2,7 @@ package com.practice.application_service.repository;
 
 import com.practice.application_service.dto.ApplicationDetailsResponse;
 import com.practice.application_service.dto.util.ApplicationFilter;
+import com.practice.application_service.dto.util.PagedResponse;
 import com.practice.application_service.model.Application;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -27,7 +28,13 @@ public class ApplicationRepository {
         return sessionFactory.getCurrentSession().get(Application.class, id);
     }
 
-    public List<ApplicationDetailsResponse> findWithFilters(ApplicationFilter filter) {
+    public PagedResponse<ApplicationDetailsResponse> findWithFilters(ApplicationFilter filter) {
+        List<ApplicationDetailsResponse> items = findFilteredItems(filter);
+        long total = countWithFilters(filter);
+        return new PagedResponse<>(items, filter.getPage(), filter.getSize(), total);
+    }
+
+    private List<ApplicationDetailsResponse> findFilteredItems(ApplicationFilter filter) {
         var session = sessionFactory.getCurrentSession();
         StringBuilder hql = new StringBuilder("""
         SELECT new com.practice.application_service.dto.ApplicationDetailsResponse(
@@ -62,7 +69,7 @@ public class ApplicationRepository {
         return query.getResultList();
     }
 
-    public long countWithFilters(ApplicationFilter filter) {
+    private long countWithFilters(ApplicationFilter filter) {
         var session = sessionFactory.getCurrentSession();
         StringBuilder hql = new StringBuilder("""
         SELECT COUNT(a)
