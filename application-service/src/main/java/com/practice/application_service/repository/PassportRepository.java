@@ -18,12 +18,4 @@ public class PassportRepository {
         sessionFactory.getCurrentSession().persist(passport);
         return passport;
     }
-
-    public Passport findBySeriesAndNumber(String series, String number) {
-        Query<Passport> query = sessionFactory.getCurrentSession().createQuery(
-                "FROM Passport p WHERE p.series = :series AND p.number = :number", Passport.class);
-        query.setParameter("series", series);
-        query.setParameter("number", number);
-        return query.uniqueResultOptional().orElse(null);
-    }
 }

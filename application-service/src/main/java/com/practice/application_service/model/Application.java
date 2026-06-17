@@ -20,11 +20,11 @@ public class Application {
     @Column(name = "term", nullable = false)
     private Integer term;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "passport_id", nullable = false)
     private Passport passport;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employment_id", nullable = false)
     private Employment employment;
 

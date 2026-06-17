@@ -22,3 +22,7 @@ databaseChangeLog:
   - include:
       file: 006-change_phone_max_symbols.sql
       relativeToChangelogFile: true
+
+  - include:
+      file: 007-drop_unique_constraints.sql
+      relativeToChangelogFile: true

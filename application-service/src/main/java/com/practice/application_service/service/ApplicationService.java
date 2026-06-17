@@ -47,29 +47,23 @@ public class ApplicationService {
 
     @Transactional
     public ApplicationStatusResponse createApplication(ApplicationRequest request) {
-        Passport passport = passportRepository.findBySeriesAndNumber(request.getPassportSeries(), request.getPassportNumber());
-        if (passport == null) {
-            passport = new Passport();
-            passport.setLastName(request.getLastName());
-            passport.setFirstName(request.getFirstName());
-            passport.setMiddleName(request.getMiddleName());
-            passport.setSeries(request.getPassportSeries());
-            passport.setNumber(request.getPassportNumber());
-            passport.setAddress(request.getAddress());
-            passport.setMaritalStatus(request.getMaritalStatus());
-            passport.setBirthDate(request.getBirthDate());
-            passportRepository.save(passport);
-        }
+        Passport passport = new Passport();
+        passport.setLastName(request.getLastName());
+        passport.setFirstName(request.getFirstName());
+        passport.setMiddleName(request.getMiddleName());
+        passport.setSeries(request.getPassportSeries());
+        passport.setNumber(request.getPassportNumber());
+        passport.setAddress(request.getAddress());
+        passport.setMaritalStatus(request.getMaritalStatus());
+        passport.setBirthDate(request.getBirthDate());
+        passportRepository.save(passport);
 
-        Employment employment = employmentRepository.findByOrganizationAndPositionAndEmployedAt(request.getOrganization(), request.getPosition(), request.getEmployedAt());
-        if (employment == null) {
-            employment = new Employment();
-            employment.setOrganization(request.getOrganization());
-            employment.setPosition(request.getPosition());
-            employment.setEmployedAt(request.getEmployedAt());
-            employment.setDismissedAt(request.getDismissedAt());
-            employmentRepository.save(employment);
-        }
+        Employment employment = new Employment();
+        employment.setOrganization(request.getOrganization());
+        employment.setPosition(request.getPosition());
+        employment.setEmployedAt(request.getEmployedAt());
+        employment.setDismissedAt(request.getDismissedAt());
+        employmentRepository.save(employment);
 
         Application application = new Application();
         application.setPhone(request.getPhone());
