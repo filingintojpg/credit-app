@@ -15,11 +15,15 @@ import com.practice.application_service.repository.DecisionRepository;
 import com.practice.application_service.repository.EmploymentRepository;
 import com.practice.application_service.repository.PassportRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class ApplicationService {
 
     private final PassportRepository passportRepository;
@@ -41,6 +45,7 @@ public class ApplicationService {
         this.camundaClient = camundaClient;
     }
 
+    @Transactional
     public ApplicationStatusResponse createApplication(ApplicationRequest request) {
         Passport passport = passportRepository.findBySeriesAndNumber(request.getPassportSeries(), request.getPassportNumber());
         if (passport == null) {
@@ -80,7 +85,12 @@ public class ApplicationService {
         decision.setUpdatedAt(LocalDateTime.now());
         decisionRepository.save(decision);
 
-        camundaClient.startCreditApplicationProcess(application.getId());
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                camundaClient.startCreditApplicationProcess(application.getId());
+            }
+        });
 
         return new ApplicationStatusResponse(application.getId(), decision.getStatus().name());
     }

@@ -19,80 +19,72 @@ public class ApplicationRepository {
     }
 
     public Application save(Application application) {
-        try (var session = sessionFactory.openSession()) {
-            var transaction = session.beginTransaction();
-            session.persist(application);
-            transaction.commit();
-            return application;
-        }
+        sessionFactory.getCurrentSession().persist(application);
+        return application;
     }
 
     public Application findById(Long id) {
-        try (var session = sessionFactory.openSession()) {
-            return session.get(Application.class, id);
-        }
+        return sessionFactory.getCurrentSession().get(Application.class, id);
     }
 
     public List<ApplicationDetailsResponse> findWithFilters(ApplicationFilter filter) {
-        try (var session = sessionFactory.openSession()) {
-            StringBuilder hql = new StringBuilder("""
-            SELECT new com.practice.application_service.dto.ApplicationDetailsResponse(
-                a.id, a.phone, a.moneyAmount, a.term,
-                d.status, d.updatedAt,
-                p.lastName, p.firstName, p.middleName,
-                p.series, p.number, p.address, p.maritalStatus, p.birthDate,
-                e.organization, e.position, e.employedAt, e.dismissedAt
-            )
-            FROM Application a
-            JOIN a.passport p
-            JOIN a.employment e
-            JOIN Decision d ON d.application = a
-            WHERE 1=1
-            """);
+        var session = sessionFactory.getCurrentSession();
+        StringBuilder hql = new StringBuilder("""
+        SELECT new com.practice.application_service.dto.ApplicationDetailsResponse(
+            a.id, a.phone, a.moneyAmount, a.term,
+            d.status, d.updatedAt,
+            p.lastName, p.firstName, p.middleName,
+            p.series, p.number, p.address, p.maritalStatus, p.birthDate,
+            e.organization, e.position, e.employedAt, e.dismissedAt
+        )
+        FROM Application a
+        JOIN a.passport p
+        JOIN a.employment e
+        JOIN Decision d ON d.application = a
+        WHERE 1=1
+        """);
 
-            if (filter.getAmount() != null) { hql.append(" AND a.moneyAmount = :amount"); }
-            if (filter.getTerm() != null) { hql.append(" AND a.term = :term"); }
-            if (filter.getPhone() != null) { hql.append(" AND a.phone = :phone"); }
-            if (filter.getStatuses() != null && !filter.getStatuses().isEmpty()) { hql.append(" AND d.status IN :statuses"); }
+        if (filter.getAmount() != null) { hql.append(" AND a.moneyAmount = :amount"); }
+        if (filter.getTerm() != null) { hql.append(" AND a.term = :term"); }
+        if (filter.getPhone() != null) { hql.append(" AND a.phone = :phone"); }
+        if (filter.getStatuses() != null && !filter.getStatuses().isEmpty()) { hql.append(" AND d.status IN :statuses"); }
 
-            Query<ApplicationDetailsResponse> query = session.createQuery(hql.toString(), ApplicationDetailsResponse.class);
+        Query<ApplicationDetailsResponse> query = session.createQuery(hql.toString(), ApplicationDetailsResponse.class);
 
-            if (filter.getAmount() != null) { query.setParameter("amount", filter.getAmount()); }
-            if (filter.getTerm() != null) { query.setParameter("term", filter.getTerm()); }
-            if (filter.getPhone() != null) { query.setParameter("phone", filter.getPhone()); }
-            if (filter.getStatuses() != null && !filter.getStatuses().isEmpty()) { query.setParameter("statuses", filter.getStatuses()); }
+        if (filter.getAmount() != null) { query.setParameter("amount", filter.getAmount()); }
+        if (filter.getTerm() != null) { query.setParameter("term", filter.getTerm()); }
+        if (filter.getPhone() != null) { query.setParameter("phone", filter.getPhone()); }
+        if (filter.getStatuses() != null && !filter.getStatuses().isEmpty()) { query.setParameter("statuses", filter.getStatuses()); }
 
-            query.setFirstResult(filter.getPage() * filter.getSize());
-            query.setMaxResults(filter.getSize());
+        query.setFirstResult(filter.getPage() * filter.getSize());
+        query.setMaxResults(filter.getSize());
 
-            return query.getResultList();
-        }
+        return query.getResultList();
     }
 
     public long countWithFilters(ApplicationFilter filter) {
-        try (var session = sessionFactory.openSession()) {
-            StringBuilder hql = new StringBuilder("""
-            SELECT COUNT(a)
-            FROM Application a
-            JOIN a.passport p
-            JOIN a.employment e
-            JOIN Decision d ON d.application = a
-            WHERE 1=1
-            """);
+        var session = sessionFactory.getCurrentSession();
+        StringBuilder hql = new StringBuilder("""
+        SELECT COUNT(a)
+        FROM Application a
+        JOIN a.passport p
+        JOIN a.employment e
+        JOIN Decision d ON d.application = a
+        WHERE 1=1
+        """);
 
-            if (filter.getAmount() != null) { hql.append(" AND a.moneyAmount = :amount"); }
-            if (filter.getTerm() != null) { hql.append(" AND a.term = :term"); }
-            if (filter.getPhone() != null) { hql.append(" AND a.phone = :phone"); }
-            if (filter.getStatuses() != null && !filter.getStatuses().isEmpty()) { hql.append(" AND d.status IN :statuses"); }
+        if (filter.getAmount() != null) { hql.append(" AND a.moneyAmount = :amount"); }
+        if (filter.getTerm() != null) { hql.append(" AND a.term = :term"); }
+        if (filter.getPhone() != null) { hql.append(" AND a.phone = :phone"); }
+        if (filter.getStatuses() != null && !filter.getStatuses().isEmpty()) { hql.append(" AND d.status IN :statuses"); }
 
-            Query<Long> query = session.createQuery(hql.toString(), Long.class);
+        Query<Long> query = session.createQuery(hql.toString(), Long.class);
 
-            if (filter.getAmount() != null) { query.setParameter("amount", filter.getAmount()); }
-            if (filter.getTerm() != null) { query.setParameter("term", filter.getTerm()); }
-            if (filter.getPhone() != null) { query.setParameter("phone", filter.getPhone()); }
-            if (filter.getStatuses() != null && !filter.getStatuses().isEmpty()) { query.setParameter("statuses", filter.getStatuses()); }
+        if (filter.getAmount() != null) { query.setParameter("amount", filter.getAmount()); }
+        if (filter.getTerm() != null) { query.setParameter("term", filter.getTerm()); }
+        if (filter.getPhone() != null) { query.setParameter("phone", filter.getPhone()); }
+        if (filter.getStatuses() != null && !filter.getStatuses().isEmpty()) { query.setParameter("statuses", filter.getStatuses()); }
 
-            return query.getSingleResult();
-        }
+        return query.getSingleResult();
     }
 }

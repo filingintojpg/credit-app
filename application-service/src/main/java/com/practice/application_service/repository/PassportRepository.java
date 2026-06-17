@@ -15,21 +15,15 @@ public class PassportRepository {
     }
 
     public Passport save(Passport passport) {
-        try (var session = sessionFactory.openSession()) {
-            var transaction = session.beginTransaction();
-            session.persist(passport);
-            transaction.commit();
-            return passport;
-        }
+        sessionFactory.getCurrentSession().persist(passport);
+        return passport;
     }
 
     public Passport findBySeriesAndNumber(String series, String number) {
-        try (var session = sessionFactory.openSession()) {
-            Query<Passport> query = session.createQuery(
-                    "FROM Passport p WHERE p.series = :series AND p.number = :number", Passport.class);
-            query.setParameter("series", series);
-            query.setParameter("number", number);
-            return query.uniqueResultOptional().orElse(null);
-        }
+        Query<Passport> query = sessionFactory.getCurrentSession().createQuery(
+                "FROM Passport p WHERE p.series = :series AND p.number = :number", Passport.class);
+        query.setParameter("series", series);
+        query.setParameter("number", number);
+        return query.uniqueResultOptional().orElse(null);
     }
 }

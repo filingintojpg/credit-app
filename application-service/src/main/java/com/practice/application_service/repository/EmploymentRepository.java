@@ -17,23 +17,17 @@ public class EmploymentRepository {
     }
 
     public Employment save(Employment employment) {
-        try (var session = sessionFactory.openSession()) {
-            var transaction = session.beginTransaction();
-            session.persist(employment);
-            transaction.commit();
-            return employment;
-        }
+        sessionFactory.getCurrentSession().persist(employment);
+        return employment;
     }
 
     public Employment findByOrganizationAndPositionAndEmployedAt(String organization, String position, LocalDate employedAt) {
-        try (var session = sessionFactory.openSession()) {
-            Query<Employment> query = session.createQuery(
-                    "FROM Employment e WHERE e.organization = :organization AND e.position = :position AND e.employedAt = :employedAt",
-                    Employment.class);
-            query.setParameter("organization", organization);
-            query.setParameter("position", position);
-            query.setParameter("employedAt", employedAt);
-            return query.uniqueResultOptional().orElse(null);
-        }
+        Query<Employment> query = sessionFactory.getCurrentSession().createQuery(
+                "FROM Employment e WHERE e.organization = :organization AND e.position = :position AND e.employedAt = :employedAt",
+                Employment.class);
+        query.setParameter("organization", organization);
+        query.setParameter("position", position);
+        query.setParameter("employedAt", employedAt);
+        return query.uniqueResultOptional().orElse(null);
     }
 }
