@@ -1,10 +1,7 @@
 package com.practice.application_service.dto.util;
 
 import com.practice.application_service.model.enums.DecisionStatus;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,6 +22,7 @@ public class ApplicationFilter {
     @Positive
     private Integer term;
 
+    @Pattern(regexp = "\\d{10,15}")
     private String phone;
 
     @PositiveOrZero
