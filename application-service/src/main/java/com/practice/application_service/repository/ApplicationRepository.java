@@ -1,6 +1,6 @@
 package com.practice.application_service.repository;
 
-import com.practice.application_service.dto.ApplicationDetailsResponse;
+import com.practice.application_service.dto.response.ApplicationDetailsResponse;
 import com.practice.application_service.dto.util.ApplicationFilter;
 import com.practice.application_service.dto.util.PagedResponse;
 import com.practice.application_service.model.Application;

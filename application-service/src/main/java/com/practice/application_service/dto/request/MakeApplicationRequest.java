@@ -1,4 +1,4 @@
-package com.practice.application_service.dto;
+package com.practice.application_service.dto.request;
 
 import com.practice.application_service.model.enums.MaritalStatus;
 import jakarta.validation.constraints.*;

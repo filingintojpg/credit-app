@@ -3,6 +3,8 @@ package com.practice.application_service.service;
 import com.practice.application_service.client.CamundaClient;
 import com.practice.application_service.dto.*;
 import com.practice.application_service.dto.util.ApplicationFilter;
+import com.practice.application_service.dto.response.ApplicationDetailsResponse;
+import com.practice.application_service.dto.response.ApplicationStatusResponse;
 import com.practice.application_service.dto.util.PagedResponse;
 import com.practice.application_service.exception.ApplicationNotFoundException;
 import com.practice.application_service.model.Application;

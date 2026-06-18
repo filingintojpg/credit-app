@@ -1,4 +1,4 @@
-package com.practice.application_service.dto;
+package com.practice.application_service.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

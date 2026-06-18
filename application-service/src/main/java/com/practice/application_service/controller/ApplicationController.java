@@ -1,9 +1,9 @@
 package com.practice.application_service.controller;
 
-import com.practice.application_service.dto.ApplicationDetailsResponse;
-import com.practice.application_service.dto.ApplicationRequest;
-import com.practice.application_service.dto.ApplicationStatusResponse;
-import com.practice.application_service.dto.util.ApplicationFilter;
+import com.practice.application_service.dto.request.GetApplicationRequest;
+import com.practice.application_service.dto.response.ApplicationDetailsResponse;
+import com.practice.application_service.dto.request.MakeApplicationRequest;
+import com.practice.application_service.dto.response.ApplicationStatusResponse;
 import com.practice.application_service.dto.util.PagedResponse;
 import com.practice.application_service.service.ApplicationService;
 import jakarta.validation.Valid;
