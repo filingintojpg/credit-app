@@ -20,7 +20,7 @@ public class ApplicationController {
         this.applicationService = applicationService;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<ApplicationStatusResponse> createApplication(@Valid @RequestBody CreateApplicationRequest request) {
         return ResponseEntity.ok(applicationService.createApplication(request));
     }
@@ -30,7 +30,7 @@ public class ApplicationController {
         return ResponseEntity.ok(applicationService.getStatus(applicationId));
     }
 
-    @PostMapping("/filter")
+    @PostMapping
     public ResponseEntity<PagedResponse<ApplicationDetailsResponse>> getApplications(@Valid @RequestBody GetApplicationRequest request) {
         return ResponseEntity.ok(applicationService.getApplications(request));
     }
