@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-public class MakeApplicationRequest {
+public class CreateApplicationRequest {
 
     @NotBlank
     private String lastName;
