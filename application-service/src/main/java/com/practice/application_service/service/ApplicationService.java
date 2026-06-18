@@ -2,7 +2,7 @@ package com.practice.application_service.service;
 
 import com.practice.application_service.client.CamundaClient;
 import com.practice.application_service.dto.request.GetApplicationRequest;
-import com.practice.application_service.dto.request.MakeApplicationRequest;
+import com.practice.application_service.dto.request.CreateApplicationRequest;
 import com.practice.application_service.dto.response.ApplicationDetailsResponse;
 import com.practice.application_service.dto.response.ApplicationStatusResponse;
 import com.practice.application_service.dto.util.PagedResponse;
@@ -47,7 +47,7 @@ public class ApplicationService {
     }
 
     @Transactional
-    public ApplicationStatusResponse createApplication(MakeApplicationRequest request) {
+    public ApplicationStatusResponse createApplication(CreateApplicationRequest request) {
         Passport passport = new Passport();
         passport.setLastName(request.getLastName());
         passport.setFirstName(request.getFirstName());

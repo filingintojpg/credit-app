@@ -2,7 +2,7 @@ package com.practice.application_service.controller;
 
 import com.practice.application_service.dto.request.GetApplicationRequest;
 import com.practice.application_service.dto.response.ApplicationDetailsResponse;
-import com.practice.application_service.dto.request.MakeApplicationRequest;
+import com.practice.application_service.dto.request.CreateApplicationRequest;
 import com.practice.application_service.dto.response.ApplicationStatusResponse;
 import com.practice.application_service.dto.util.PagedResponse;
 import com.practice.application_service.service.ApplicationService;
@@ -21,7 +21,7 @@ public class ApplicationController {
     }
 
     @PostMapping
-    public ResponseEntity<ApplicationStatusResponse> createApplication(@Valid @RequestBody MakeApplicationRequest request) {
+    public ResponseEntity<ApplicationStatusResponse> createApplication(@Valid @RequestBody CreateApplicationRequest request) {
         return ResponseEntity.ok(applicationService.createApplication(request));
     }
 
