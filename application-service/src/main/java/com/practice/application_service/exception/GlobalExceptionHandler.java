@@ -1,6 +1,9 @@
 package com.practice.application_service.exception;
 
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+import com.practice.application_service.dto.response.ExceptionResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -11,52 +14,97 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private String getRequestPath(HttpServletRequest request) {
+        return request != null ? request.getRequestURI() : "Unknown request path";
+    }
+
+    private String getRequestMethod(HttpServletRequest request) {
+        return request != null ? request.getMethod() : "Unknown request method";
+    }
+
     @ExceptionHandler(ApplicationNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleNotFound(ApplicationNotFoundException ex) {
-        Map<String, String> error = new HashMap<>();
-        error.put("error", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    public ResponseEntity<ExceptionResponse> handleNotFound(ApplicationNotFoundException ex, HttpServletRequest request) {
+        ExceptionResponse response = new ExceptionResponse(
+                HttpStatus.NOT_FOUND.value(),
+                "Not Found",
+                ex.getMessage(),
+                getRequestPath(request),
+                getRequestMethod(request)
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidation(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ExceptionResponse> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest request) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(fieldError ->
                 errors.put(fieldError.getField(), fieldError.getDefaultMessage())
         );
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+
+        ExceptionResponse response = new ExceptionResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "Validation Failed",
+                "One or more fields have validation errors",
+                getRequestPath(request),
+                getRequestMethod(request)
+        );
+        response.setValidationErrors(errors);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<Map<String, String>> handleValidation(HttpMessageNotReadableException ex) {
-        Map<String, String> error = new HashMap<>();
+    public ResponseEntity<ExceptionResponse> handleJsonParseError(HttpMessageNotReadableException ex, HttpServletRequest request) {
+        String message;
         if (ex.getCause() instanceof UnrecognizedPropertyException unrecognizedPropertyException) {
-            error.put("error", "Unknown field: '" + unrecognizedPropertyException.getPropertyName() + "'");
+            message = "Unknown field: '" + unrecognizedPropertyException.getPropertyName() + "'";
         } else {
-            error.put("error", "Invalid JSON format");
+            message = "Invalid JSON format. Please check the request body syntax";
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+
+        ExceptionResponse response = new ExceptionResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                "Bad Request",
+                message,
+                getRequestPath(request),
+                getRequestMethod(request)
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<Map<String, String>> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex) {
-        Map<String, String> error = new HashMap<>();
-        error.put("error", "Method " + ex.getMethod() + " is not supported for this endpoint");
-        error.put("supported_methods", ex.getSupportedHttpMethods().toString());
-        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(error);
+    public ResponseEntity<ExceptionResponse> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpServletRequest request) {
+        List<String> supportedMethods = ex.getSupportedHttpMethods() != null
+                ? ex.getSupportedHttpMethods().stream().map(HttpMethod::name).toList()
+                : List.of();
+
+        ExceptionResponse response = new ExceptionResponse(
+                HttpStatus.METHOD_NOT_ALLOWED.value(),
+                "Method Not Allowed",
+                "Method " + ex.getMethod() + " is not supported for this endpoint",
+                getRequestPath(request),
+                getRequestMethod(request)
+        );
+        response.setSupportedMethods(supportedMethods);
+
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(response);
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<Map<String, String>> handleNoHandlerFound(NoHandlerFoundException ex) {
-        Map<String, String> error = new HashMap<>();
-        error.put("error", "Endpoint not found");
-        error.put("path", ex.getRequestURL());
-        error.put("method", ex.getHttpMethod());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    public ResponseEntity<ExceptionResponse> handleNoHandlerFound(NoHandlerFoundException ex, HttpServletRequest request) {
+        ExceptionResponse response = new ExceptionResponse(
+                HttpStatus.NOT_FOUND.value(),
+                "Not Found",
+                "The requested endpoint does not exist",
+                ex.getRequestURL(),
+                ex.getHttpMethod()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 }
