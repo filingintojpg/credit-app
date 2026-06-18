@@ -21,7 +21,7 @@ public class ApplicationController {
     }
 
     @PostMapping
-    public ResponseEntity<ApplicationStatusResponse> createApplication(@Valid @RequestBody ApplicationRequest request) {
+    public ResponseEntity<ApplicationStatusResponse> createApplication(@Valid @RequestBody MakeApplicationRequest request) {
         return ResponseEntity.ok(applicationService.createApplication(request));
     }
 
@@ -31,7 +31,7 @@ public class ApplicationController {
     }
 
     @PostMapping("/filter")
-    public ResponseEntity<PagedResponse<ApplicationDetailsResponse>> getApplications(@Valid @RequestBody ApplicationFilter filter) {
-        return ResponseEntity.ok(applicationService.getApplications(filter));
+    public ResponseEntity<PagedResponse<ApplicationDetailsResponse>> getApplications(@Valid @RequestBody GetApplicationRequest request) {
+        return ResponseEntity.ok(applicationService.getApplications(request));
     }
 }

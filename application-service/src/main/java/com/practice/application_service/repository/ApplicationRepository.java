@@ -3,6 +3,7 @@ package com.practice.application_service.repository;
 import com.practice.application_service.dto.response.ApplicationDetailsResponse;
 import com.practice.application_service.dto.util.ApplicationFilter;
 import com.practice.application_service.dto.util.PagedResponse;
+import com.practice.application_service.dto.util.Pagination;
 import com.practice.application_service.model.Application;
 import com.practice.application_service.model.Decision;
 import com.practice.application_service.model.Employment;
@@ -36,13 +37,15 @@ public class ApplicationRepository {
         return sessionFactory.getCurrentSession().get(Application.class, id);
     }
 
-    public PagedResponse<ApplicationDetailsResponse> findWithFilters(ApplicationFilter filter) {
-        List<ApplicationDetailsResponse> items = findFilteredItems(filter);
-        long total = countWithFilters(filter);
-        return new PagedResponse<>(items, filter.getPage(), filter.getSize(), total);
+    public PagedResponse<ApplicationDetailsResponse> findWithFilters(ApplicationFilter filter, Pagination pagination) {
+        return new PagedResponse<>(
+                findFilteredItemsWithPagination(filter, pagination),
+                pagination.getPage(),
+                pagination.getSize(),
+                countWithFilters(filter));
     }
 
-    private List<ApplicationDetailsResponse> findFilteredItems(ApplicationFilter filter) {
+    private List<ApplicationDetailsResponse> findFilteredItemsWithPagination(ApplicationFilter filter, Pagination pagination) {
         var session = sessionFactory.getCurrentSession();
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<ApplicationDetailsResponse> cq = cb.createQuery(ApplicationDetailsResponse.class);
@@ -65,8 +68,8 @@ public class ApplicationRepository {
         cq.where(buildPredicates(cb, decision, application, filter));
 
         return session.createQuery(cq)
-                .setFirstResult(filter.getPage() * filter.getSize())
-                .setMaxResults(filter.getSize())
+                .setFirstResult(pagination.getPage() * pagination.getSize())
+                .setMaxResults(pagination.getSize())
                 .getResultList();
     }
 

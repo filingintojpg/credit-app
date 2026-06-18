@@ -24,11 +24,4 @@ public class ApplicationFilter {
 
     @Pattern(regexp = "\\d{10,15}")
     private String phone;
-
-    @PositiveOrZero
-    private int page = 0;
-
-    @Min(1)
-    @Max(100)
-    private int size = 20;
 }
