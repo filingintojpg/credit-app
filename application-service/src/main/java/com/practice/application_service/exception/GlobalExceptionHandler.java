@@ -8,6 +8,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,5 +49,14 @@ public class GlobalExceptionHandler {
         error.put("error", "Method " + ex.getMethod() + " is not supported for this endpoint");
         error.put("supported_methods", ex.getSupportedHttpMethods().toString());
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(error);
+    }
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<Map<String, String>> handleNoHandlerFound(NoHandlerFoundException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "Endpoint not found");
+        error.put("path", ex.getRequestURL());
+        error.put("method", ex.getHttpMethod());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 }
