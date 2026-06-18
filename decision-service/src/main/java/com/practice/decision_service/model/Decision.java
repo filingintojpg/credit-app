@@ -2,10 +2,16 @@ package com.practice.decision_service.model;
 
 import com.practice.decision_service.model.enums.DecisionStatus;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "system_decisions")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Decision {
 
     @Id
@@ -21,16 +27,4 @@ public class Decision {
 
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public Long getApplicationId() { return applicationId; }
-    public void setApplicationId(Long applicationId) { this.applicationId = applicationId; }
-
-    public DecisionStatus getStatus() { return status; }
-    public void setStatus(DecisionStatus status) { this.status = status; }
-
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }

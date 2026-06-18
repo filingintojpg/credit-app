@@ -2,11 +2,16 @@ package com.practice.application_service.model;
 
 import com.practice.application_service.model.enums.MaritalStatus;
 import jakarta.persistence.*;
-
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "client_passports")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Passport {
 
     @Id
@@ -37,31 +42,4 @@ public class Passport {
 
     @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getLastName() { return lastName; }
-    public void setLastName(String lastName) { this.lastName = lastName; }
-
-    public String getFirstName() { return firstName; }
-    public void setFirstName(String firstName) { this.firstName = firstName; }
-
-    public String getMiddleName() { return middleName; }
-    public void setMiddleName(String middleName) { this.middleName = middleName; }
-
-    public String getSeries() { return series; }
-    public void setSeries(String series) { this.series = series; }
-
-    public String getNumber() { return number; }
-    public void setNumber(String number) { this.number = number; }
-
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
-
-    public MaritalStatus getMaritalStatus() { return maritalStatus; }
-    public void setMaritalStatus(MaritalStatus maritalStatus) { this.maritalStatus = maritalStatus; }
-
-    public LocalDate getBirthDate() { return birthDate; }
-    public void setBirthDate(LocalDate birthDate) { this.birthDate = birthDate; }
 }

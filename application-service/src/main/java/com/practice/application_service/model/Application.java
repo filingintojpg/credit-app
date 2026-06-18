@@ -1,10 +1,16 @@
 package com.practice.application_service.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "client_applications")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Application {
 
     @Id
@@ -27,22 +33,4 @@ public class Application {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employment_id", nullable = false)
     private Employment employment;
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
-
-    public BigDecimal getMoneyAmount() { return moneyAmount; }
-    public void setMoneyAmount(BigDecimal moneyAmount) { this.moneyAmount = moneyAmount; }
-
-    public Integer getTerm() { return term; }
-    public void setTerm(Integer term) { this.term = term; }
-
-    public Passport getPassport() { return passport; }
-    public void setPassport(Passport passport) { this.passport = passport; }
-
-    public Employment getEmployment() { return employment; }
-    public void setEmployment(Employment employment) { this.employment = employment; }
 }

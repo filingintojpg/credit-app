@@ -1,10 +1,16 @@
 package com.practice.application_service.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "client_employments")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Employment {
 
     @Id
@@ -22,19 +28,4 @@ public class Employment {
 
     @Column(name = "dismissed_at")
     private LocalDate dismissedAt;
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getOrganization() { return organization; }
-    public void setOrganization(String organization) { this.organization = organization; }
-
-    public String getPosition() { return position; }
-    public void setPosition(String position) { this.position = position; }
-
-    public LocalDate getEmployedAt() { return employedAt; }
-    public void setEmployedAt(LocalDate employedAt) { this.employedAt = employedAt; }
-
-    public LocalDate getDismissedAt() { return dismissedAt; }
-    public void setDismissedAt(LocalDate dismissedAt) { this.dismissedAt = dismissedAt; }
 }

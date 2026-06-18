@@ -1,18 +1,15 @@
 package com.practice.application_service.dto;
 
-public class ApplicationStatusResponse {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class ApplicationStatusResponse {
     private Long applicationId;
     private String status;
-
-    public ApplicationStatusResponse(Long applicationId, String status) {
-        this.applicationId = applicationId;
-        this.status = status;
-    }
-
-    public Long getApplicationId() { return applicationId; }
-    public void setApplicationId(Long applicationId) { this.applicationId = applicationId; }
-
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
 }
