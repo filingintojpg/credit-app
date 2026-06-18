@@ -5,14 +5,10 @@ import com.practice.application_service.dto.ApplicationRequest;
 import com.practice.application_service.dto.ApplicationStatusResponse;
 import com.practice.application_service.dto.util.ApplicationFilter;
 import com.practice.application_service.dto.util.PagedResponse;
-import com.practice.application_service.model.enums.DecisionStatus;
 import com.practice.application_service.service.ApplicationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 @RestController
 @RequestMapping("/application")
@@ -34,9 +30,8 @@ public class ApplicationController {
         return ResponseEntity.ok(applicationService.getStatus(applicationId));
     }
 
-    @GetMapping
-    public ResponseEntity<PagedResponse<ApplicationDetailsResponse>> getApplications(
-            @Valid @ModelAttribute ApplicationFilter filter) {
+    @PostMapping("/filter")
+    public ResponseEntity<PagedResponse<ApplicationDetailsResponse>> getApplications(@Valid @RequestBody ApplicationFilter filter) {
         return ResponseEntity.ok(applicationService.getApplications(filter));
     }
 }
