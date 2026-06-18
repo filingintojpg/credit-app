@@ -4,10 +4,18 @@ import com.practice.application_service.dto.ApplicationDetailsResponse;
 import com.practice.application_service.dto.util.ApplicationFilter;
 import com.practice.application_service.dto.util.PagedResponse;
 import com.practice.application_service.model.Application;
+import com.practice.application_service.model.Decision;
+import com.practice.application_service.model.Employment;
+import com.practice.application_service.model.Passport;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -36,62 +44,63 @@ public class ApplicationRepository {
 
     private List<ApplicationDetailsResponse> findFilteredItems(ApplicationFilter filter) {
         var session = sessionFactory.getCurrentSession();
-        StringBuilder hql = new StringBuilder("""
-        SELECT new com.practice.application_service.dto.ApplicationDetailsResponse(
-            a.id, a.phone, a.moneyAmount, a.term,
-            d.status, d.updatedAt,
-            p.lastName, p.firstName, p.middleName,
-            p.series, p.number, p.address, p.maritalStatus, p.birthDate,
-            e.organization, e.position, e.employedAt, e.dismissedAt
-        )
-        FROM Application a
-        JOIN a.passport p
-        JOIN a.employment e
-        JOIN Decision d ON d.application = a
-        WHERE 1=1
-        """);
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<ApplicationDetailsResponse> cq = cb.createQuery(ApplicationDetailsResponse.class);
 
-        if (filter.getAmount() != null) { hql.append(" AND a.moneyAmount = :amount"); }
-        if (filter.getTerm() != null) { hql.append(" AND a.term = :term"); }
-        if (filter.getPhone() != null) { hql.append(" AND a.phone = :phone"); }
-        if (filter.getStatuses() != null && !filter.getStatuses().isEmpty()) { hql.append(" AND d.status IN :statuses"); }
+        Root<Decision> decision = cq.from(Decision.class);
+        Join<Decision, Application> application = decision.join("application");
+        Join<Application, Passport> passport = application.join("passport");
+        Join<Application, Employment> employment = application.join("employment");
 
-        Query<ApplicationDetailsResponse> query = session.createQuery(hql.toString(), ApplicationDetailsResponse.class);
+        cq.select(cb.construct(ApplicationDetailsResponse.class,
+                application.get("id"), application.get("phone"), application.get("moneyAmount"), application.get("term"),
+                decision.get("status"), decision.get("updatedAt"),
+                passport.get("lastName"), passport.get("firstName"), passport.get("middleName"),
+                passport.get("series"), passport.get("number"), passport.get("address"),
+                passport.get("maritalStatus"), passport.get("birthDate"),
+                employment.get("organization"), employment.get("position"),
+                employment.get("employedAt"), employment.get("dismissedAt")
+        ));
 
-        if (filter.getAmount() != null) { query.setParameter("amount", filter.getAmount()); }
-        if (filter.getTerm() != null) { query.setParameter("term", filter.getTerm()); }
-        if (filter.getPhone() != null) { query.setParameter("phone", filter.getPhone()); }
-        if (filter.getStatuses() != null && !filter.getStatuses().isEmpty()) { query.setParameter("statuses", filter.getStatuses()); }
+        cq.where(buildPredicates(cb, decision, application, filter));
 
-        query.setFirstResult(filter.getPage() * filter.getSize());
-        query.setMaxResults(filter.getSize());
-
-        return query.getResultList();
+        return session.createQuery(cq)
+                .setFirstResult(filter.getPage() * filter.getSize())
+                .setMaxResults(filter.getSize())
+                .getResultList();
     }
 
     private long countWithFilters(ApplicationFilter filter) {
         var session = sessionFactory.getCurrentSession();
-        StringBuilder hql = new StringBuilder("""
-        SELECT COUNT(a)
-        FROM Application a
-        JOIN a.passport p
-        JOIN a.employment e
-        JOIN Decision d ON d.application = a
-        WHERE 1=1
-        """);
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
 
-        if (filter.getAmount() != null) { hql.append(" AND a.moneyAmount = :amount"); }
-        if (filter.getTerm() != null) { hql.append(" AND a.term = :term"); }
-        if (filter.getPhone() != null) { hql.append(" AND a.phone = :phone"); }
-        if (filter.getStatuses() != null && !filter.getStatuses().isEmpty()) { hql.append(" AND d.status IN :statuses"); }
+        Root<Decision> decision = cq.from(Decision.class);
+        Join<Decision, Application> application = decision.join("application");
 
-        Query<Long> query = session.createQuery(hql.toString(), Long.class);
+        cq.select(cb.count(decision));
+        cq.where(buildPredicates(cb, decision, application, filter));
 
-        if (filter.getAmount() != null) { query.setParameter("amount", filter.getAmount()); }
-        if (filter.getTerm() != null) { query.setParameter("term", filter.getTerm()); }
-        if (filter.getPhone() != null) { query.setParameter("phone", filter.getPhone()); }
-        if (filter.getStatuses() != null && !filter.getStatuses().isEmpty()) { query.setParameter("statuses", filter.getStatuses()); }
+        return session.createQuery(cq).getSingleResult();
+    }
 
-        return query.getSingleResult();
+    private Predicate buildPredicates(CriteriaBuilder cb, Root<Decision> decision,
+                                      Join<Decision, Application> application, ApplicationFilter filter) {
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (filter.getAmount() != null) {
+            predicates.add(cb.equal(application.get("moneyAmount"), filter.getAmount()));
+        }
+        if (filter.getTerm() != null) {
+            predicates.add(cb.equal(application.get("term"), filter.getTerm()));
+        }
+        if (filter.getPhone() != null) {
+            predicates.add(cb.equal(application.get("phone"), filter.getPhone()));
+        }
+        if (filter.getStatuses() != null && !filter.getStatuses().isEmpty()) {
+            predicates.add(decision.get("status").in(filter.getStatuses()));
+        }
+
+        return cb.and(predicates.toArray(new Predicate[0]));
     }
 }
