@@ -4,7 +4,7 @@
     <bpmn:startEvent id="start" name="Start">
       <bpmn:outgoing>Flow_0z45fzy</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:serviceTask id="validateApplication" name="Validate Application" camunda:delegateExpression="${validateApplicationDelegate}">
+    <bpmn:serviceTask id="validateApplication" name="Validate Application" camunda:expression="${validateApplicationDelegate.execute(execution)}">
       <bpmn:incoming>Flow_0z45fzy</bpmn:incoming>
       <bpmn:outgoing>Flow_1754rnt</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -15,11 +15,11 @@
       <bpmn:outgoing>Flow_0zdccoz</bpmn:outgoing>
       <bpmn:outgoing>Flow_154a8lv</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="approveApplication" name="Approve Application" camunda:delegateExpression="${approveApplicationDelegate}">
+    <bpmn:serviceTask id="approveApplication" name="Approve Application" camunda:expression="${approveApplicationDelegate.execute(execution)}">
       <bpmn:incoming>Flow_0zdccoz</bpmn:incoming>
       <bpmn:outgoing>Flow_0w90upv</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="rejectApplication" name="Reject Application" camunda:delegateExpression="${rejectApplicationDelegate}">
+    <bpmn:serviceTask id="rejectApplication" name="Reject Application" camunda:expression="${rejectApplicationDelegate.execute(execution)}">
       <bpmn:incoming>Flow_154a8lv</bpmn:incoming>
       <bpmn:outgoing>Flow_1kzpb4g</bpmn:outgoing>
     </bpmn:serviceTask>

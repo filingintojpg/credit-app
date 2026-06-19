@@ -2,15 +2,14 @@ package com.practice.decision_service.delegate;
 
 import com.practice.decision_service.repository.ApplicationRepository;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 
-@Component("validateApplicationDelegate")
-public class ValidateApplicationDelegate implements JavaDelegate {
+@Component
+public class ValidateApplicationDelegate {
 
     private final ApplicationRepository applicationRepository;
 
@@ -18,7 +17,6 @@ public class ValidateApplicationDelegate implements JavaDelegate {
         this.applicationRepository = applicationRepository;
     }
 
-    @Override
     public void execute(DelegateExecution execution) {
         Long applicationId = (Long) execution.getVariable("applicationId");
 
