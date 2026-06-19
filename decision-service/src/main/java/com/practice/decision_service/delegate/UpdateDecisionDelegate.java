@@ -6,16 +6,17 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RejectApplicationDelegate {
+public class UpdateDecisionDelegate {
 
     private final DecisionRepository decisionRepository;
 
-    public RejectApplicationDelegate(DecisionRepository decisionRepository) {
+    public UpdateDecisionDelegate(DecisionRepository decisionRepository) {
         this.decisionRepository = decisionRepository;
     }
 
     public void execute(DelegateExecution execution) {
         Long applicationId = (Long) execution.getVariable("applicationId");
-        decisionRepository.updateStatus(applicationId, DecisionStatus.REJECTED);
+        DecisionStatus status = DecisionStatus.valueOf((String) execution.getVariable("decisionStatus"));
+        decisionRepository.updateStatus(applicationId, status);
     }
 }

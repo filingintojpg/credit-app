@@ -15,11 +15,21 @@
       <bpmn:outgoing>Flow_0zdccoz</bpmn:outgoing>
       <bpmn:outgoing>Flow_154a8lv</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="approveApplication" name="Approve Application" camunda:expression="${approveApplicationDelegate.execute(execution)}">
+    <bpmn:serviceTask id="approveApplication" name="Approve Application" camunda:expression="${updateDecisionDelegate.execute(execution)}">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="decisionStatus">APPROVED</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0zdccoz</bpmn:incoming>
       <bpmn:outgoing>Flow_0w90upv</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="rejectApplication" name="Reject Application" camunda:expression="${rejectApplicationDelegate.execute(execution)}">
+    <bpmn:serviceTask id="rejectApplication" name="Reject Application" camunda:expression="${updateDecisionDelegate.execute(execution)}">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="decisionStatus">REJECTED</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_154a8lv</bpmn:incoming>
       <bpmn:outgoing>Flow_1kzpb4g</bpmn:outgoing>
     </bpmn:serviceTask>
