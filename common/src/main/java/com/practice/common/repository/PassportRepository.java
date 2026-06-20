@@ -1,8 +1,7 @@
-package com.practice.application_service.repository;
+package com.practice.common.repository;
 
-import com.practice.application_service.model.Passport;
+import com.practice.common.model.Passport;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository

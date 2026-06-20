@@ -1,6 +1,6 @@
-package com.practice.application_service.model;
+package com.practice.common.model;
 
-import com.practice.application_service.model.enums.DecisionStatus;
+import com.practice.common.model.enums.DecisionStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

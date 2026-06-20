@@ -1,7 +1,7 @@
 package com.practice.decision_service.delegate;
 
-import com.practice.decision_service.model.enums.DecisionStatus;
-import com.practice.decision_service.repository.DecisionRepository;
+import com.practice.common.model.enums.DecisionStatus;
+import com.practice.common.repository.DecisionRepository;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.springframework.stereotype.Component;
 

@@ -1,8 +1,8 @@
 package com.practice.decision_service.delegate;
 
-import com.practice.decision_service.repository.ApplicationRepository;
+import com.practice.common.model.Application;
+import com.practice.common.repository.ApplicationRepository;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -20,11 +20,11 @@ public class LoadApplicationDataDelegate {
     public void execute(DelegateExecution execution) {
         Long applicationId = (Long) execution.getVariable("applicationId");
 
-        var data = applicationRepository.findApplicationData(applicationId);
-        int age = Period.between(data.birthDate(), LocalDate.now()).getYears();
+        Application application = applicationRepository.findById(applicationId);
+        int age = Period.between(application.getPassport().getBirthDate(), LocalDate.now()).getYears();
 
-        execution.setVariable("amount", data.amount());
-        execution.setVariable("term", data.term());
+        execution.setVariable("amount", application.getMoneyAmount());
+        execution.setVariable("term", application.getTerm());
         execution.setVariable("age", age);
     }
 }

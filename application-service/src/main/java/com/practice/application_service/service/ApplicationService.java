@@ -7,15 +7,16 @@ import com.practice.application_service.dto.response.ApplicationDetailsResponse;
 import com.practice.application_service.dto.response.ApplicationStatusResponse;
 import com.practice.application_service.dto.util.PagedResponse;
 import com.practice.application_service.exception.ApplicationNotFoundException;
-import com.practice.application_service.model.Application;
-import com.practice.application_service.model.Decision;
-import com.practice.application_service.model.Employment;
-import com.practice.application_service.model.Passport;
-import com.practice.application_service.model.enums.DecisionStatus;
-import com.practice.application_service.repository.ApplicationRepository;
-import com.practice.application_service.repository.DecisionRepository;
-import com.practice.application_service.repository.EmploymentRepository;
-import com.practice.application_service.repository.PassportRepository;
+import com.practice.application_service.repository.ApplicationSearchRepository;
+import com.practice.common.model.Application;
+import com.practice.common.model.Decision;
+import com.practice.common.model.Employment;
+import com.practice.common.model.Passport;
+import com.practice.common.model.enums.DecisionStatus;
+import com.practice.common.repository.ApplicationRepository;
+import com.practice.common.repository.DecisionRepository;
+import com.practice.common.repository.EmploymentRepository;
+import com.practice.common.repository.PassportRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronization;
@@ -30,6 +31,7 @@ public class ApplicationService {
     private final PassportRepository passportRepository;
     private final EmploymentRepository employmentRepository;
     private final ApplicationRepository applicationRepository;
+    private final ApplicationSearchRepository applicationSearchRepository;
     private final DecisionRepository decisionRepository;
 
     private final CamundaClient camundaClient;
@@ -37,11 +39,13 @@ public class ApplicationService {
     public ApplicationService(PassportRepository passportRepository,
                               EmploymentRepository employmentRepository,
                               ApplicationRepository applicationRepository,
+                              ApplicationSearchRepository applicationSearchRepository,
                               DecisionRepository decisionRepository,
                               CamundaClient camundaClient) {
         this.passportRepository = passportRepository;
         this.employmentRepository = employmentRepository;
         this.applicationRepository = applicationRepository;
+        this.applicationSearchRepository = applicationSearchRepository;
         this.decisionRepository = decisionRepository;
         this.camundaClient = camundaClient;
     }
@@ -104,6 +108,6 @@ public class ApplicationService {
     }
 
     public PagedResponse<ApplicationDetailsResponse> getApplications(GetApplicationRequest filter) {
-        return applicationRepository.findWithFilters(filter.getFilter(), filter.getPagination());
+        return applicationSearchRepository.findWithFilters(filter.getFilter(), filter.getPagination());
     }
 }

@@ -1,7 +1,7 @@
 package com.practice.application_service.dto.response;
 
-import com.practice.application_service.model.enums.DecisionStatus;
-import com.practice.application_service.model.enums.MaritalStatus;
+import com.practice.common.model.enums.DecisionStatus;
+import com.practice.common.model.enums.MaritalStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

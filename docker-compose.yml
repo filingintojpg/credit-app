@@ -18,8 +18,8 @@ services:
 
   application-service:
     build:
-      context: ./application-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: application-service/Dockerfile
     container_name: application-service
     ports:
       - "${APPLICATION_SERVICE_PORT}:8080"
@@ -41,8 +41,8 @@ services:
 
   decision-service:
     build:
-      context: ./decision-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: decision-service/Dockerfile
     container_name: decision-service
     ports:
       - "${DECISION_SERVICE_PORT}:8090"

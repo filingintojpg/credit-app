@@ -1,11 +1,8 @@
-package com.practice.application_service.repository;
+package com.practice.common.repository;
 
-import com.practice.application_service.model.Employment;
+import com.practice.common.model.Employment;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
-
-import java.time.LocalDate;
 
 @Repository
 public class EmploymentRepository {

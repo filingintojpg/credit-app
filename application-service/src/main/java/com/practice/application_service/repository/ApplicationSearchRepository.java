@@ -4,10 +4,10 @@ import com.practice.application_service.dto.response.ApplicationDetailsResponse;
 import com.practice.application_service.dto.util.ApplicationFilter;
 import com.practice.application_service.dto.util.PagedResponse;
 import com.practice.application_service.dto.util.Pagination;
-import com.practice.application_service.model.Application;
-import com.practice.application_service.model.Decision;
-import com.practice.application_service.model.Employment;
-import com.practice.application_service.model.Passport;
+import com.practice.common.model.Application;
+import com.practice.common.model.Decision;
+import com.practice.common.model.Employment;
+import com.practice.common.model.Passport;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
@@ -20,21 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class ApplicationRepository {
+public class ApplicationSearchRepository {
 
     private final SessionFactory sessionFactory;
 
-    public ApplicationRepository(SessionFactory sessionFactory) {
+    public ApplicationSearchRepository(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
-    }
-
-    public Application save(Application application) {
-        sessionFactory.getCurrentSession().persist(application);
-        return application;
-    }
-
-    public Application findById(Long id) {
-        return sessionFactory.getCurrentSession().get(Application.class, id);
     }
 
     public PagedResponse<ApplicationDetailsResponse> findWithFilters(ApplicationFilter filter, Pagination pagination) {

@@ -1,4 +1,4 @@
-package com.practice.decision_service.model.enums;
+package com.practice.common.model.enums;
 
 public enum DecisionStatus {
     PENDING,

@@ -1,4 +1,4 @@
-package com.practice.application_service.model;
+package com.practice.common.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;

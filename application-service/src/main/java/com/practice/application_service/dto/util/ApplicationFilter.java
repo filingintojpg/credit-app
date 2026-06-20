@@ -1,6 +1,6 @@
 package com.practice.application_service.dto.util;
 
-import com.practice.application_service.model.enums.DecisionStatus;
+import com.practice.common.model.enums.DecisionStatus;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
