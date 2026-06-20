@@ -13,8 +13,7 @@ public class PassportRepository {
         this.sessionFactory = sessionFactory;
     }
 
-    public Passport save(Passport passport) {
+    public void save(Passport passport) {
         sessionFactory.getCurrentSession().persist(passport);
-        return passport;
     }
 }

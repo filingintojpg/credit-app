@@ -17,9 +17,8 @@ public class DecisionRepository {
         this.sessionFactory = sessionFactory;
     }
 
-    public Decision save(Decision decision) {
+    public void save(Decision decision) {
         sessionFactory.getCurrentSession().persist(decision);
-        return decision;
     }
 
     public Decision findByApplicationId(Long applicationId) {

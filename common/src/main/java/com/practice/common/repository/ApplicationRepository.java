@@ -13,9 +13,8 @@ public class ApplicationRepository {
         this.sessionFactory = sessionFactory;
     }
 
-    public Application save(Application application) {
+    public void save(Application application) {
         sessionFactory.getCurrentSession().persist(application);
-        return application;
     }
 
     public Application findById(Long id) {

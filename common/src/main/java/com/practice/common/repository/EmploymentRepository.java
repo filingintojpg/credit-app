@@ -13,8 +13,7 @@ public class EmploymentRepository {
         this.sessionFactory = sessionFactory;
     }
 
-    public Employment save(Employment employment) {
+    public void save(Employment employment) {
         sessionFactory.getCurrentSession().persist(employment);
-        return employment;
     }
 }
