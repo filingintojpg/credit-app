@@ -7,7 +7,7 @@ import com.practice.application_service.dto.response.ApplicationDetailsResponse;
 import com.practice.application_service.dto.response.ApplicationStatusResponse;
 import com.practice.application_service.dto.util.PagedResponse;
 import com.practice.application_service.exception.ApplicationNotFoundException;
-import com.practice.application_service.repository.ApplicationSearchRepository;
+import com.practice.application_service.repository.ApplicationFilterRepository;
 import com.practice.common.model.Application;
 import com.practice.common.model.Decision;
 import com.practice.common.model.Employment;
@@ -31,7 +31,7 @@ public class ApplicationService {
     private final PassportRepository passportRepository;
     private final EmploymentRepository employmentRepository;
     private final ApplicationRepository applicationRepository;
-    private final ApplicationSearchRepository applicationSearchRepository;
+    private final ApplicationFilterRepository applicationFilterRepository;
     private final DecisionRepository decisionRepository;
 
     private final CamundaClient camundaClient;
@@ -39,13 +39,13 @@ public class ApplicationService {
     public ApplicationService(PassportRepository passportRepository,
                               EmploymentRepository employmentRepository,
                               ApplicationRepository applicationRepository,
-                              ApplicationSearchRepository applicationSearchRepository,
+                              ApplicationFilterRepository applicationFilterRepository,
                               DecisionRepository decisionRepository,
                               CamundaClient camundaClient) {
         this.passportRepository = passportRepository;
         this.employmentRepository = employmentRepository;
         this.applicationRepository = applicationRepository;
-        this.applicationSearchRepository = applicationSearchRepository;
+        this.applicationFilterRepository = applicationFilterRepository;
         this.decisionRepository = decisionRepository;
         this.camundaClient = camundaClient;
     }
@@ -108,6 +108,6 @@ public class ApplicationService {
     }
 
     public PagedResponse<ApplicationDetailsResponse> getApplications(GetApplicationRequest filter) {
-        return applicationSearchRepository.findWithFilters(filter.getFilter(), filter.getPagination());
+        return applicationFilterRepository.findWithFilters(filter.getFilter(), filter.getPagination());
     }
 }

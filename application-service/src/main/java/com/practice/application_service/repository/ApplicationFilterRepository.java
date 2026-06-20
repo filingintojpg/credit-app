@@ -20,11 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class ApplicationSearchRepository {
+public class ApplicationFilterRepository {
 
     private final SessionFactory sessionFactory;
 
-    public ApplicationSearchRepository(SessionFactory sessionFactory) {
+    public ApplicationFilterRepository(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
