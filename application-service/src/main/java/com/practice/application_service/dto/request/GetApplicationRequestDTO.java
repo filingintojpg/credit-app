@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class GetApplicationRequest {
+public class GetApplicationRequestDTO {
 
     @Valid
     private ApplicationFilter filter = new ApplicationFilter();

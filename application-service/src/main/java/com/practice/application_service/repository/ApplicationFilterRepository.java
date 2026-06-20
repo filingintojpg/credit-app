@@ -1,6 +1,6 @@
 package com.practice.application_service.repository;
 
-import com.practice.application_service.dto.response.ApplicationDetailsResponse;
+import com.practice.application_service.dto.response.ApplicationDetailsResponseDTO;
 import com.practice.application_service.dto.util.ApplicationFilter;
 import com.practice.application_service.dto.util.PagedResponse;
 import com.practice.application_service.dto.util.Pagination;
@@ -28,7 +28,7 @@ public class ApplicationFilterRepository {
         this.sessionFactory = sessionFactory;
     }
 
-    public PagedResponse<ApplicationDetailsResponse> findWithFilters(ApplicationFilter filter, Pagination pagination) {
+    public PagedResponse<ApplicationDetailsResponseDTO> findWithFilters(ApplicationFilter filter, Pagination pagination) {
         return new PagedResponse<>(
                 findFilteredItemsWithPagination(filter, pagination),
                 pagination.getPage(),
@@ -36,17 +36,17 @@ public class ApplicationFilterRepository {
                 countWithFilters(filter));
     }
 
-    private List<ApplicationDetailsResponse> findFilteredItemsWithPagination(ApplicationFilter filter, Pagination pagination) {
+    private List<ApplicationDetailsResponseDTO> findFilteredItemsWithPagination(ApplicationFilter filter, Pagination pagination) {
         var session = sessionFactory.getCurrentSession();
         CriteriaBuilder cb = session.getCriteriaBuilder();
-        CriteriaQuery<ApplicationDetailsResponse> cq = cb.createQuery(ApplicationDetailsResponse.class);
+        CriteriaQuery<ApplicationDetailsResponseDTO> cq = cb.createQuery(ApplicationDetailsResponseDTO.class);
 
         Root<Decision> decision = cq.from(Decision.class);
         Join<Decision, Application> application = decision.join("application");
         Join<Application, Passport> passport = application.join("passport");
         Join<Application, Employment> employment = application.join("employment");
 
-        cq.select(cb.construct(ApplicationDetailsResponse.class,
+        cq.select(cb.construct(ApplicationDetailsResponseDTO.class,
                 application.get("id"), application.get("phone"), application.get("moneyAmount"), application.get("term"),
                 decision.get("status"), decision.get("updatedAt"),
                 passport.get("lastName"), passport.get("firstName"), passport.get("middleName"),

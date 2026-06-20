@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApplicationDetailsResponse {
+public class ApplicationDetailsResponseDTO {
 
     private Long applicationId;
     private String phone;

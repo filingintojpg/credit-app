@@ -1,7 +1,7 @@
 package com.practice.application_service.exception;
 
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
-import com.practice.application_service.dto.response.ExceptionResponse;
+import com.practice.application_service.dto.response.ExceptionResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -29,8 +29,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ApplicationNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> handleNotFound(ApplicationNotFoundException ex, HttpServletRequest request) {
-        ExceptionResponse response = new ExceptionResponse(
+    public ResponseEntity<ExceptionResponseDTO> handleNotFound(ApplicationNotFoundException ex, HttpServletRequest request) {
+        ExceptionResponseDTO response = new ExceptionResponseDTO(
                 HttpStatus.NOT_FOUND.value(),
                 "Not Found",
                 ex.getMessage(),
@@ -41,13 +41,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ExceptionResponse> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest request) {
+    public ResponseEntity<ExceptionResponseDTO> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest request) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(fieldError ->
                 errors.put(fieldError.getField(), fieldError.getDefaultMessage())
         );
 
-        ExceptionResponse response = new ExceptionResponse(
+        ExceptionResponseDTO response = new ExceptionResponseDTO(
                 HttpStatus.BAD_REQUEST.value(),
                 "Validation Failed",
                 "One or more fields have validation errors",
@@ -60,7 +60,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ExceptionResponse> handleJsonParseError(HttpMessageNotReadableException ex, HttpServletRequest request) {
+    public ResponseEntity<ExceptionResponseDTO> handleJsonParseError(HttpMessageNotReadableException ex, HttpServletRequest request) {
         String message;
         if (ex.getCause() instanceof UnrecognizedPropertyException unrecognizedPropertyException) {
             message = "Unknown field: '" + unrecognizedPropertyException.getPropertyName() + "'";
@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
             message = "Invalid JSON format. Please check the request body syntax";
         }
 
-        ExceptionResponse response = new ExceptionResponse(
+        ExceptionResponseDTO response = new ExceptionResponseDTO(
                 HttpStatus.BAD_REQUEST.value(),
                 "Bad Request",
                 message,
@@ -79,12 +79,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ExceptionResponse> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpServletRequest request) {
+    public ResponseEntity<ExceptionResponseDTO> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpServletRequest request) {
         List<String> supportedMethods = ex.getSupportedHttpMethods() != null
                 ? ex.getSupportedHttpMethods().stream().map(HttpMethod::name).toList()
                 : List.of();
 
-        ExceptionResponse response = new ExceptionResponse(
+        ExceptionResponseDTO response = new ExceptionResponseDTO(
                 HttpStatus.METHOD_NOT_ALLOWED.value(),
                 "Method Not Allowed",
                 "Method " + ex.getMethod() + " is not supported for this endpoint",
@@ -97,8 +97,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<ExceptionResponse> handleNoHandlerFound(NoHandlerFoundException ex, HttpServletRequest request) {
-        ExceptionResponse response = new ExceptionResponse(
+    public ResponseEntity<ExceptionResponseDTO> handleNoHandlerFound(NoHandlerFoundException ex, HttpServletRequest request) {
+        ExceptionResponseDTO response = new ExceptionResponseDTO(
                 HttpStatus.NOT_FOUND.value(),
                 "Not Found",
                 "The requested endpoint does not exist",
@@ -109,8 +109,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionResponse> handleGenericException(Exception ex, HttpServletRequest request) {
-        ExceptionResponse response = new ExceptionResponse(
+    public ResponseEntity<ExceptionResponseDTO> handleGenericException(Exception ex, HttpServletRequest request) {
+        ExceptionResponseDTO response = new ExceptionResponseDTO(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Internal Server Error",
                 "An unexpected error occurred",

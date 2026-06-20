@@ -14,7 +14,7 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ExceptionResponse {
+public class ExceptionResponseDTO {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime timestamp;
@@ -27,7 +27,7 @@ public class ExceptionResponse {
     private Map<String, String> validationErrors;
     private List<String> supportedMethods;
 
-    public ExceptionResponse(int status, String error, String message, String path, String method) {
+    public ExceptionResponseDTO(int status, String error, String message, String path, String method) {
         this.timestamp = LocalDateTime.now();
         this.status = status;
         this.error = error;

@@ -1,10 +1,10 @@
 package com.practice.application_service.service;
 
 import com.practice.application_service.client.CamundaClient;
-import com.practice.application_service.dto.request.GetApplicationRequest;
-import com.practice.application_service.dto.request.CreateApplicationRequest;
-import com.practice.application_service.dto.response.ApplicationDetailsResponse;
-import com.practice.application_service.dto.response.ApplicationStatusResponse;
+import com.practice.application_service.dto.request.GetApplicationRequestDTO;
+import com.practice.application_service.dto.request.CreateApplicationRequestDTO;
+import com.practice.application_service.dto.response.ApplicationDetailsResponseDTO;
+import com.practice.application_service.dto.response.ApplicationStatusResponseDTO;
 import com.practice.application_service.dto.util.PagedResponse;
 import com.practice.application_service.exception.ApplicationNotFoundException;
 import com.practice.application_service.repository.ApplicationFilterRepository;
@@ -51,7 +51,7 @@ public class ApplicationService {
     }
 
     @Transactional
-    public ApplicationStatusResponse createApplication(CreateApplicationRequest request) {
+    public ApplicationStatusResponseDTO createApplication(CreateApplicationRequestDTO request) {
         Passport passport = new Passport();
         passport.setLastName(request.getLastName());
         passport.setFirstName(request.getFirstName());
@@ -91,10 +91,10 @@ public class ApplicationService {
             }
         });
 
-        return new ApplicationStatusResponse(application.getId(), decision.getStatus().name());
+        return new ApplicationStatusResponseDTO(application.getId(), decision.getStatus().name());
     }
 
-    public ApplicationStatusResponse getStatus(Long applicationId) {
+    public ApplicationStatusResponseDTO getStatus(Long applicationId) {
         Application application = applicationRepository.findById(applicationId);
 
         if (application == null) {
@@ -104,10 +104,10 @@ public class ApplicationService {
         Decision decision = decisionRepository.findByApplicationId(applicationId);
         String status = decision.getStatus().name();
 
-        return new ApplicationStatusResponse(applicationId, status);
+        return new ApplicationStatusResponseDTO(applicationId, status);
     }
 
-    public PagedResponse<ApplicationDetailsResponse> getApplications(GetApplicationRequest filter) {
+    public PagedResponse<ApplicationDetailsResponseDTO> getApplications(GetApplicationRequestDTO filter) {
         return applicationFilterRepository.findWithFilters(filter.getFilter(), filter.getPagination());
     }
 }

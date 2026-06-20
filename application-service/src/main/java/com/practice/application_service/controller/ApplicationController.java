@@ -1,9 +1,9 @@
 package com.practice.application_service.controller;
 
-import com.practice.application_service.dto.request.GetApplicationRequest;
-import com.practice.application_service.dto.response.ApplicationDetailsResponse;
-import com.practice.application_service.dto.request.CreateApplicationRequest;
-import com.practice.application_service.dto.response.ApplicationStatusResponse;
+import com.practice.application_service.dto.request.GetApplicationRequestDTO;
+import com.practice.application_service.dto.response.ApplicationDetailsResponseDTO;
+import com.practice.application_service.dto.request.CreateApplicationRequestDTO;
+import com.practice.application_service.dto.response.ApplicationStatusResponseDTO;
 import com.practice.application_service.dto.util.PagedResponse;
 import com.practice.application_service.service.ApplicationService;
 import jakarta.validation.Valid;
@@ -21,17 +21,17 @@ public class ApplicationController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ApplicationStatusResponse> createApplication(@Valid @RequestBody CreateApplicationRequest request) {
+    public ResponseEntity<ApplicationStatusResponseDTO> createApplication(@Valid @RequestBody CreateApplicationRequestDTO request) {
         return ResponseEntity.ok(applicationService.createApplication(request));
     }
 
     @GetMapping("/{applicationId}/status")
-    public ResponseEntity<ApplicationStatusResponse> getStatus(@PathVariable Long applicationId) {
+    public ResponseEntity<ApplicationStatusResponseDTO> getStatus(@PathVariable Long applicationId) {
         return ResponseEntity.ok(applicationService.getStatus(applicationId));
     }
 
     @PostMapping
-    public ResponseEntity<PagedResponse<ApplicationDetailsResponse>> getApplications(@Valid @RequestBody GetApplicationRequest request) {
+    public ResponseEntity<PagedResponse<ApplicationDetailsResponseDTO>> getApplications(@Valid @RequestBody GetApplicationRequestDTO request) {
         return ResponseEntity.ok(applicationService.getApplications(request));
     }
 }
