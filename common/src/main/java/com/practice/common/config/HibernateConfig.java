@@ -25,7 +25,7 @@ public class HibernateConfig {
     }
 
     @Bean
-    public LocalSessionFactoryBean sessionFactory() {
+    public LocalSessionFactoryBean sessionFactory(LiquibaseConfig.LiquibaseMigrationsApplied migrationsApplied) {
         var factoryBean = new LocalSessionFactoryBean();
         factoryBean.setDataSource(dataSource);
         factoryBean.setAnnotatedClasses(
