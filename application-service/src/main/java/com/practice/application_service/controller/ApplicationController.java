@@ -4,7 +4,7 @@ import com.practice.application_service.dto.request.GetApplicationRequestDTO;
 import com.practice.application_service.dto.response.ApplicationDetailsResponseDTO;
 import com.practice.application_service.dto.request.CreateApplicationRequestDTO;
 import com.practice.application_service.dto.response.ApplicationStatusResponseDTO;
-import com.practice.application_service.dto.util.PagedResponse;
+import com.practice.application_service.dto.util.Paged;
 import com.practice.application_service.service.ApplicationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +31,7 @@ public class ApplicationController {
     }
 
     @PostMapping
-    public ResponseEntity<PagedResponse<ApplicationDetailsResponseDTO>> getApplications(@Valid @RequestBody GetApplicationRequestDTO request) {
+    public ResponseEntity<Paged<ApplicationDetailsResponseDTO>> getApplications(@Valid @RequestBody GetApplicationRequestDTO request) {
         return ResponseEntity.ok(applicationService.getApplications(request));
     }
 }

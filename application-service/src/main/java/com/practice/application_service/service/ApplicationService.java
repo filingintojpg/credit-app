@@ -5,7 +5,7 @@ import com.practice.application_service.dto.request.GetApplicationRequestDTO;
 import com.practice.application_service.dto.request.CreateApplicationRequestDTO;
 import com.practice.application_service.dto.response.ApplicationDetailsResponseDTO;
 import com.practice.application_service.dto.response.ApplicationStatusResponseDTO;
-import com.practice.application_service.dto.util.PagedResponse;
+import com.practice.application_service.dto.util.Paged;
 import com.practice.application_service.exception.ApplicationNotFoundException;
 import com.practice.application_service.repository.ApplicationFilterRepository;
 import com.practice.common.model.Application;
@@ -107,7 +107,7 @@ public class ApplicationService {
         return new ApplicationStatusResponseDTO(applicationId, status);
     }
 
-    public PagedResponse<ApplicationDetailsResponseDTO> getApplications(GetApplicationRequestDTO filter) {
+    public Paged<ApplicationDetailsResponseDTO> getApplications(GetApplicationRequestDTO filter) {
         return applicationFilterRepository.findWithFilters(filter.getFilter(), filter.getPagination());
     }
 }

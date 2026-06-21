@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PagedResponse<T> {
+public class Paged<T> {
     private List<T> content;
     private int page;
     private int size;

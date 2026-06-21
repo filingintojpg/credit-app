@@ -2,7 +2,7 @@ package com.practice.application_service.repository;
 
 import com.practice.application_service.dto.response.ApplicationDetailsResponseDTO;
 import com.practice.application_service.dto.util.ApplicationFilter;
-import com.practice.application_service.dto.util.PagedResponse;
+import com.practice.application_service.dto.util.Paged;
 import com.practice.application_service.dto.util.Pagination;
 import com.practice.common.model.Application;
 import com.practice.common.model.Decision;
@@ -28,8 +28,8 @@ public class ApplicationFilterRepository {
         this.sessionFactory = sessionFactory;
     }
 
-    public PagedResponse<ApplicationDetailsResponseDTO> findWithFilters(ApplicationFilter filter, Pagination pagination) {
-        return new PagedResponse<>(
+    public Paged<ApplicationDetailsResponseDTO> findWithFilters(ApplicationFilter filter, Pagination pagination) {
+        return new Paged<>(
                 findFilteredItemsWithPagination(filter, pagination),
                 pagination.getPage(),
                 pagination.getSize(),
