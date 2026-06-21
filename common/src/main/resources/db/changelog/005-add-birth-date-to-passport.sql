@@ -1,4 +1,4 @@
 --liquibase formatted sql
 
 --changeset filingintojpg:10
-ALTER TABLE client_passports ADD COLUMN birth_date DATE;
+ALTER TABLE client_passports ADD COLUMN birth_date DATE NOT NULL;
