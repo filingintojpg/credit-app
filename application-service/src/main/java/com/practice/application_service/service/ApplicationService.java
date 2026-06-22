@@ -1,30 +1,37 @@
 package com.practice.application_service.service;
 
 import com.practice.application_service.client.CamundaClient;
-import com.practice.application_service.dto.*;
-import com.practice.application_service.dto.util.ApplicationFilter;
-import com.practice.application_service.dto.util.PagedResponse;
+import com.practice.application_service.dto.request.GetApplicationRequestDTO;
+import com.practice.application_service.dto.request.CreateApplicationRequestDTO;
+import com.practice.application_service.dto.response.ApplicationDetailsResponseDTO;
+import com.practice.application_service.dto.response.ApplicationStatusResponseDTO;
+import com.practice.application_service.dto.util.Paged;
 import com.practice.application_service.exception.ApplicationNotFoundException;
-import com.practice.application_service.model.Application;
-import com.practice.application_service.model.Decision;
-import com.practice.application_service.model.Employment;
-import com.practice.application_service.model.Passport;
-import com.practice.application_service.model.enums.DecisionStatus;
-import com.practice.application_service.repository.ApplicationRepository;
-import com.practice.application_service.repository.DecisionRepository;
-import com.practice.application_service.repository.EmploymentRepository;
-import com.practice.application_service.repository.PassportRepository;
+import com.practice.application_service.repository.ApplicationFilterRepository;
+import com.practice.common.model.Application;
+import com.practice.common.model.Decision;
+import com.practice.common.model.Employment;
+import com.practice.common.model.Passport;
+import com.practice.common.model.enums.DecisionStatus;
+import com.practice.common.repository.ApplicationRepository;
+import com.practice.common.repository.DecisionRepository;
+import com.practice.common.repository.EmploymentRepository;
+import com.practice.common.repository.PassportRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class ApplicationService {
 
     private final PassportRepository passportRepository;
     private final EmploymentRepository employmentRepository;
     private final ApplicationRepository applicationRepository;
+    private final ApplicationFilterRepository applicationFilterRepository;
     private final DecisionRepository decisionRepository;
 
     private final CamundaClient camundaClient;
@@ -32,39 +39,36 @@ public class ApplicationService {
     public ApplicationService(PassportRepository passportRepository,
                               EmploymentRepository employmentRepository,
                               ApplicationRepository applicationRepository,
+                              ApplicationFilterRepository applicationFilterRepository,
                               DecisionRepository decisionRepository,
                               CamundaClient camundaClient) {
         this.passportRepository = passportRepository;
         this.employmentRepository = employmentRepository;
         this.applicationRepository = applicationRepository;
+        this.applicationFilterRepository = applicationFilterRepository;
         this.decisionRepository = decisionRepository;
         this.camundaClient = camundaClient;
     }
 
-    public ApplicationStatusResponse createApplication(ApplicationRequest request) {
-        Passport passport = passportRepository.findBySeriesAndNumber(request.getPassportSeries(), request.getPassportNumber());
-        if (passport == null) {
-            passport = new Passport();
-            passport.setLastName(request.getLastName());
-            passport.setFirstName(request.getFirstName());
-            passport.setMiddleName(request.getMiddleName());
-            passport.setSeries(request.getPassportSeries());
-            passport.setNumber(request.getPassportNumber());
-            passport.setAddress(request.getAddress());
-            passport.setMaritalStatus(request.getMaritalStatus());
-            passport.setBirthDate(request.getBirthDate());
-            passportRepository.save(passport);
-        }
+    @Transactional
+    public ApplicationStatusResponseDTO createApplication(CreateApplicationRequestDTO request) {
+        Passport passport = new Passport();
+        passport.setLastName(request.getLastName());
+        passport.setFirstName(request.getFirstName());
+        passport.setMiddleName(request.getMiddleName());
+        passport.setSeries(request.getPassportSeries());
+        passport.setNumber(request.getPassportNumber());
+        passport.setAddress(request.getAddress());
+        passport.setMaritalStatus(request.getMaritalStatus());
+        passport.setBirthDate(request.getBirthDate());
+        passportRepository.save(passport);
 
-        Employment employment = employmentRepository.findByOrganizationAndPositionAndEmployedAt(request.getOrganization(), request.getPosition(), request.getEmployedAt());
-        if (employment == null) {
-            employment = new Employment();
-            employment.setOrganization(request.getOrganization());
-            employment.setPosition(request.getPosition());
-            employment.setEmployedAt(request.getEmployedAt());
-            employment.setDismissedAt(request.getDismissedAt());
-            employmentRepository.save(employment);
-        }
+        Employment employment = new Employment();
+        employment.setOrganization(request.getOrganization());
+        employment.setPosition(request.getPosition());
+        employment.setEmployedAt(request.getEmployedAt());
+        employment.setDismissedAt(request.getDismissedAt());
+        employmentRepository.save(employment);
 
         Application application = new Application();
         application.setPhone(request.getPhone());
@@ -80,12 +84,17 @@ public class ApplicationService {
         decision.setUpdatedAt(LocalDateTime.now());
         decisionRepository.save(decision);
 
-        camundaClient.startCreditApplicationProcess(application.getId());
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                camundaClient.startCreditApplicationProcess(application.getId());
+            }
+        });
 
-        return new ApplicationStatusResponse(application.getId(), decision.getStatus().name());
+        return new ApplicationStatusResponseDTO(application.getId(), decision.getStatus().name());
     }
 
-    public ApplicationStatusResponse getStatus(Long applicationId) {
+    public ApplicationStatusResponseDTO getStatus(Long applicationId) {
         Application application = applicationRepository.findById(applicationId);
 
         if (application == null) {
@@ -95,12 +104,10 @@ public class ApplicationService {
         Decision decision = decisionRepository.findByApplicationId(applicationId);
         String status = decision.getStatus().name();
 
-        return new ApplicationStatusResponse(applicationId, status);
+        return new ApplicationStatusResponseDTO(applicationId, status);
     }
 
-    public PagedResponse<ApplicationDetailsResponse> getApplications(ApplicationFilter filter) {
-        List<ApplicationDetailsResponse> items = applicationRepository.findWithFilters(filter);
-        long total = applicationRepository.countWithFilters(filter);
-        return new PagedResponse<>(items, filter.getPage(), filter.getSize(), total);
+    public Paged<ApplicationDetailsResponseDTO> getApplications(GetApplicationRequestDTO filter) {
+        return applicationFilterRepository.findWithFilters(filter.getFilter(), filter.getPagination());
     }
 }

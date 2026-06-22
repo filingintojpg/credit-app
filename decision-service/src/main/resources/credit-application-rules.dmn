@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1d9pydh" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.48.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.24.0">
+  <decision id="creditApplicationRules" name="Credit Application Rules">
+    <decisionTable id="DecisionTable_0kyn52e" hitPolicy="FIRST">
+      <input id="Input_1" label="Amount">
+        <inputExpression id="InputExpression_1" typeRef="double">
+          <text>amount</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0thctct" label="Term">
+        <inputExpression id="LiteralExpression_1q2omed" typeRef="integer">
+          <text>term</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0ckwek2" label="Age">
+        <inputExpression id="LiteralExpression_1xrz6om" typeRef="integer">
+          <text>age</text>
+        </inputExpression>
+      </input>
+      <output id="Output_1" label="Approved" name="approved" typeRef="boolean" />
+      <rule id="DecisionRule_1x0ewu2">
+        <inputEntry id="UnaryTests_0l9t2t2">
+          <text>[1000..30000]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1x4iag3">
+          <text>[3..30]</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_128byvl">
+          <text>[18..60]</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_134vwb9">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_02bw2mq">
+        <inputEntry id="UnaryTests_081xsgm">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0ib9rh6">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0ur8we5">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_18vjrpv">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram>
+      <dmndi:DMNShape id="Decision_19bulrb_di" dmnElementRef="creditApplicationRules">
+        <dc:Bounds height="80" width="180" x="160" y="100" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

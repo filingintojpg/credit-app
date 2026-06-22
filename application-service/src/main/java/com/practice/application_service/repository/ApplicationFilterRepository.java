@@ -1,0 +1,100 @@
+package com.practice.application_service.repository;
+
+import com.practice.application_service.dto.response.ApplicationDetailsResponseDTO;
+import com.practice.application_service.dto.util.ApplicationFilter;
+import com.practice.application_service.dto.util.Paged;
+import com.practice.application_service.dto.util.Pagination;
+import com.practice.common.model.Application;
+import com.practice.common.model.Decision;
+import com.practice.common.model.Employment;
+import com.practice.common.model.Passport;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Repository
+public class ApplicationFilterRepository {
+
+    private final SessionFactory sessionFactory;
+
+    public ApplicationFilterRepository(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    public Paged<ApplicationDetailsResponseDTO> findWithFilters(ApplicationFilter filter, Pagination pagination) {
+        return new Paged<>(
+                findFilteredItemsWithPagination(filter, pagination),
+                pagination.getPage(),
+                pagination.getSize(),
+                countWithFilters(filter));
+    }
+
+    private List<ApplicationDetailsResponseDTO> findFilteredItemsWithPagination(ApplicationFilter filter, Pagination pagination) {
+        var session = sessionFactory.getCurrentSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<ApplicationDetailsResponseDTO> cq = cb.createQuery(ApplicationDetailsResponseDTO.class);
+
+        Root<Decision> decision = cq.from(Decision.class);
+        Join<Decision, Application> application = decision.join("application");
+        Join<Application, Passport> passport = application.join("passport");
+        Join<Application, Employment> employment = application.join("employment");
+
+        cq.select(cb.construct(ApplicationDetailsResponseDTO.class,
+                application.get("id"), application.get("phone"), application.get("moneyAmount"), application.get("term"),
+                decision.get("status"), decision.get("updatedAt"),
+                passport.get("lastName"), passport.get("firstName"), passport.get("middleName"),
+                passport.get("series"), passport.get("number"), passport.get("address"),
+                passport.get("maritalStatus"), passport.get("birthDate"),
+                employment.get("organization"), employment.get("position"),
+                employment.get("employedAt"), employment.get("dismissedAt")
+        ));
+
+        cq.where(buildPredicates(cb, decision, application, filter));
+
+        return session.createQuery(cq)
+                .setFirstResult(pagination.getPage() * pagination.getSize())
+                .setMaxResults(pagination.getSize())
+                .getResultList();
+    }
+
+    private long countWithFilters(ApplicationFilter filter) {
+        var session = sessionFactory.getCurrentSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+
+        Root<Decision> decision = cq.from(Decision.class);
+        Join<Decision, Application> application = decision.join("application");
+
+        cq.select(cb.count(decision));
+        cq.where(buildPredicates(cb, decision, application, filter));
+
+        return session.createQuery(cq).getSingleResult();
+    }
+
+    private Predicate buildPredicates(CriteriaBuilder cb, Root<Decision> decision,
+                                      Join<Decision, Application> application, ApplicationFilter filter) {
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (filter.getAmount() != null) {
+            predicates.add(cb.equal(application.get("moneyAmount"), filter.getAmount()));
+        }
+        if (filter.getTerm() != null) {
+            predicates.add(cb.equal(application.get("term"), filter.getTerm()));
+        }
+        if (filter.getPhone() != null) {
+            predicates.add(cb.equal(application.get("phone"), filter.getPhone()));
+        }
+        if (filter.getStatuses() != null && !filter.getStatuses().isEmpty()) {
+            predicates.add(decision.get("status").in(filter.getStatuses()));
+        }
+
+        return cb.and(predicates.toArray(new Predicate[0]));
+    }
+}

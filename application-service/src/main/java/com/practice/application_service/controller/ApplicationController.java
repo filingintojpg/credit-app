@@ -1,18 +1,14 @@
 package com.practice.application_service.controller;
 
-import com.practice.application_service.dto.ApplicationDetailsResponse;
-import com.practice.application_service.dto.ApplicationRequest;
-import com.practice.application_service.dto.ApplicationStatusResponse;
-import com.practice.application_service.dto.util.ApplicationFilter;
-import com.practice.application_service.dto.util.PagedResponse;
-import com.practice.application_service.model.enums.DecisionStatus;
+import com.practice.application_service.dto.request.GetApplicationRequestDTO;
+import com.practice.application_service.dto.response.ApplicationDetailsResponseDTO;
+import com.practice.application_service.dto.request.CreateApplicationRequestDTO;
+import com.practice.application_service.dto.response.ApplicationStatusResponseDTO;
+import com.practice.application_service.dto.util.Paged;
 import com.practice.application_service.service.ApplicationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 @RestController
 @RequestMapping("/application")
@@ -24,35 +20,18 @@ public class ApplicationController {
         this.applicationService = applicationService;
     }
 
-    @PostMapping
-    public ResponseEntity<ApplicationStatusResponse> createApplication(@Valid @RequestBody ApplicationRequest request) {
-        ApplicationStatusResponse response = applicationService.createApplication(request);
-        return ResponseEntity.ok(response);
+    @PostMapping("/create")
+    public ResponseEntity<ApplicationStatusResponseDTO> createApplication(@Valid @RequestBody CreateApplicationRequestDTO request) {
+        return ResponseEntity.ok(applicationService.createApplication(request));
     }
 
     @GetMapping("/{applicationId}/status")
-    public ResponseEntity<ApplicationStatusResponse> getStatus(@PathVariable Long applicationId) {
-        ApplicationStatusResponse response = applicationService.getStatus(applicationId);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<ApplicationStatusResponseDTO> getStatus(@PathVariable Long applicationId) {
+        return ResponseEntity.ok(applicationService.getStatus(applicationId));
     }
 
-    @GetMapping
-    public ResponseEntity<PagedResponse<ApplicationDetailsResponse>> getApplications(
-            @RequestParam(required = false) List<DecisionStatus> statuses,
-            @RequestParam(required = false) BigDecimal amount,
-            @RequestParam(required = false) Integer term,
-            @RequestParam(required = false) String phone,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size) {
-
-        ApplicationFilter filter = new ApplicationFilter();
-        filter.setStatuses(statuses);
-        filter.setAmount(amount);
-        filter.setTerm(term);
-        filter.setPhone(phone);
-        filter.setPage(page);
-        filter.setSize(size);
-
-        return ResponseEntity.ok(applicationService.getApplications(filter));
+    @PostMapping
+    public ResponseEntity<Paged<ApplicationDetailsResponseDTO>> getApplications(@Valid @RequestBody GetApplicationRequestDTO request) {
+        return ResponseEntity.ok(applicationService.getApplications(request));
     }
 }
