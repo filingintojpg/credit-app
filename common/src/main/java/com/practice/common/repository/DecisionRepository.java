@@ -7,6 +7,7 @@ import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public class DecisionRepository {
@@ -26,6 +27,13 @@ public class DecisionRepository {
                 "FROM Decision d WHERE d.application.id = :appId", Decision.class);
         query.setParameter("appId", applicationId);
         return query.uniqueResultOptional().orElse(null);
+    }
+
+    public List<Decision> findByStatus(DecisionStatus status) {
+        return sessionFactory.getCurrentSession()
+                .createQuery("FROM Decision d WHERE d.status = :status", Decision.class)
+                .setParameter("status", status)
+                .getResultList();
     }
 
     public void updateStatus(Long applicationId, DecisionStatus status) {
