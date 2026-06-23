@@ -7,7 +7,7 @@
         <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">R/PT10M</bpmn:timeCycle>
       </bpmn:timerEventDefinition>
     </bpmn:startEvent>
-    <bpmn:serviceTask id="loadPendingApplications" name="Load Pending Applications" camunda:expression="${loadPendingApplicationsDelegate.execute(execution)}">
+    <bpmn:serviceTask id="loadPendingApplications" name="Load Pending Applications" camunda:expression="${loadApplicationDelegate.loadPendingApplications(execution)}">
       <bpmn:incoming>Flow_04u6b96</bpmn:incoming>
       <bpmn:outgoing>Flow_08voc9w</bpmn:outgoing>
     </bpmn:serviceTask>
