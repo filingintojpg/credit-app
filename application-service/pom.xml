@@ -11,15 +11,11 @@
 
 	<artifactId>application-service</artifactId>
 
-	<properties>
-		<java.version>21</java.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>com.practice</groupId>
 			<artifactId>common</artifactId>
-			<version>1.0.0</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>

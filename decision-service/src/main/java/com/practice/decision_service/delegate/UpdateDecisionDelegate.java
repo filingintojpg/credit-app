@@ -14,7 +14,7 @@ public class UpdateDecisionDelegate {
         this.decisionRepository = decisionRepository;
     }
 
-    public void execute(DelegateExecution execution) {
+    public void updateDecisionStatus(DelegateExecution execution) {
         Long applicationId = (Long) execution.getVariable("applicationId");
         DecisionStatus status = DecisionStatus.valueOf((String) execution.getVariable("decisionStatus"));
         decisionRepository.updateStatus(applicationId, status);

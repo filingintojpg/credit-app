@@ -4,12 +4,12 @@
     <bpmn:startEvent id="start" name="Start">
       <bpmn:outgoing>Flow_0z45fzy</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:serviceTask id="loadApplicationData" name="Load Actual Application Data" camunda:expression="${loadApplicationDataDelegate.execute(execution)}">
+    <bpmn:serviceTask id="loadApplicationData" name="Load Actual Application Data" camunda:expression="${loadApplicationDelegate.loadApplicationData(execution)}">
       <bpmn:incoming>Flow_0z45fzy</bpmn:incoming>
       <bpmn:outgoing>Flow_0py8zh2</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_0z45fzy" sourceRef="start" targetRef="loadApplicationData" />
-    <bpmn:serviceTask id="approveApplication" name="Approve Application" camunda:expression="${updateDecisionDelegate.execute(execution)}">
+    <bpmn:serviceTask id="approveApplication" name="Approve Application" camunda:expression="${updateDecisionDelegate.updateDecisionStatus(execution)}">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="decisionStatus">APPROVED</camunda:inputParameter>
@@ -18,7 +18,7 @@
       <bpmn:incoming>Flow_0gn4erl</bpmn:incoming>
       <bpmn:outgoing>Flow_16niq4z</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="rejectApplication" name="Reject Application" camunda:expression="${updateDecisionDelegate.execute(execution)}">
+    <bpmn:serviceTask id="rejectApplication" name="Reject Application" camunda:expression="${updateDecisionDelegate.updateDecisionStatus(execution)}">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="decisionStatus">REJECTED</camunda:inputParameter>
@@ -33,17 +33,17 @@
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_16niq4z" sourceRef="approveApplication" targetRef="end" />
     <bpmn:sequenceFlow id="Flow_1ffoo4u" sourceRef="rejectApplication" targetRef="end" />
-    <bpmn:businessRuleTask id="Activity_0d2k5sa" name="Evaluate Application" camunda:resultVariable="approved" camunda:decisionRef="creditApplicationRules" camunda:mapDecisionResult="singleEntry">
+    <bpmn:businessRuleTask id="evaluateApplication" name="Evaluate Application" camunda:resultVariable="approved" camunda:decisionRef="creditApplicationRules" camunda:mapDecisionResult="singleEntry">
       <bpmn:incoming>Flow_0py8zh2</bpmn:incoming>
       <bpmn:outgoing>Flow_0royh6s</bpmn:outgoing>
     </bpmn:businessRuleTask>
-    <bpmn:sequenceFlow id="Flow_0py8zh2" sourceRef="loadApplicationData" targetRef="Activity_0d2k5sa" />
+    <bpmn:sequenceFlow id="Flow_0py8zh2" sourceRef="loadApplicationData" targetRef="evaluateApplication" />
     <bpmn:exclusiveGateway id="Gateway_1vhba0s" name="Is application data suits?">
       <bpmn:incoming>Flow_0royh6s</bpmn:incoming>
       <bpmn:outgoing>Flow_0gn4erl</bpmn:outgoing>
       <bpmn:outgoing>Flow_1jxyls1</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_0royh6s" sourceRef="Activity_0d2k5sa" targetRef="Gateway_1vhba0s" />
+    <bpmn:sequenceFlow id="Flow_0royh6s" sourceRef="evaluateApplication" targetRef="Gateway_1vhba0s" />
     <bpmn:sequenceFlow id="Flow_0gn4erl" name="Yes" sourceRef="Gateway_1vhba0s" targetRef="approveApplication">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved == true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -63,16 +63,6 @@
         <dc:Bounds x="270" y="160" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0d2k5sa_di" bpmnElement="Activity_0d2k5sa">
-        <dc:Bounds x="430" y="160" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1vhba0s_di" bpmnElement="Gateway_1vhba0s" isMarkerVisible="true">
-        <dc:Bounds x="585" y="175" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="646" y="190" width="89" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0wf93tq_di" bpmnElement="approveApplication">
         <dc:Bounds x="670" y="80" width="100" height="80" />
         <bpmndi:BPMNLabel />
@@ -87,13 +77,19 @@
           <dc:Bounds x="850" y="223" width="20" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0d2k5sa_di" bpmnElement="evaluateApplication">
+        <dc:Bounds x="430" y="160" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1vhba0s_di" bpmnElement="Gateway_1vhba0s" isMarkerVisible="true">
+        <dc:Bounds x="585" y="175" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="646" y="190" width="89" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0z45fzy_di" bpmnElement="Flow_0z45fzy">
         <di:waypoint x="218" y="200" />
         <di:waypoint x="270" y="200" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0py8zh2_di" bpmnElement="Flow_0py8zh2">
-        <di:waypoint x="370" y="200" />
-        <di:waypoint x="430" y="200" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_16niq4z_di" bpmnElement="Flow_16niq4z">
         <di:waypoint x="770" y="120" />
@@ -106,6 +102,10 @@
         <di:waypoint x="820" y="280" />
         <di:waypoint x="820" y="200" />
         <di:waypoint x="842" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0py8zh2_di" bpmnElement="Flow_0py8zh2">
+        <di:waypoint x="370" y="200" />
+        <di:waypoint x="430" y="200" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0royh6s_di" bpmnElement="Flow_0royh6s">
         <di:waypoint x="530" y="200" />
