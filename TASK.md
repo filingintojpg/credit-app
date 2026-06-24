@@ -58,4 +58,5 @@ TTL хранения данных в кэше - 10 минут с момента 
 * Camunda 7.24
 * Liquibase
 * Docker
-* Maven
+* Maven 3.9
+* Redis 7
