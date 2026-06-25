@@ -16,6 +16,17 @@ services:
       timeout: 5s
       retries: 10
 
+  redis:
+    image: redis:7-alpine
+    container_name: redis-container
+    ports:
+      - "${REDIS_PORT}:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   application-service:
     build:
       context: .
@@ -30,11 +41,15 @@ services:
       DB_NAME: ${DB_NAME}
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
       CAMUNDA_URL: ${CAMUNDA_URL}
       CAMUNDA_USERNAME: ${CAMUNDA_USERNAME}
       CAMUNDA_PASSWORD: ${CAMUNDA_PASSWORD}
     depends_on:
       database:
+        condition: service_healthy
+      redis:
         condition: service_healthy
       decision-service:
         condition: service_started
@@ -53,8 +68,12 @@ services:
       DB_NAME: ${DB_NAME}
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
       CAMUNDA_USERNAME: ${CAMUNDA_USERNAME}
       CAMUNDA_PASSWORD: ${CAMUNDA_PASSWORD}
     depends_on:
       database:
+        condition: service_healthy
+      redis:
         condition: service_healthy

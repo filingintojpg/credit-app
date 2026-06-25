@@ -4,6 +4,7 @@ import com.practice.common.model.Application;
 import com.practice.common.model.enums.DecisionStatus;
 import com.practice.common.repository.ApplicationRepository;
 import com.practice.common.repository.DecisionRepository;
+import com.practice.common.service.ReadService;
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.springframework.stereotype.Component;
@@ -17,22 +18,18 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class LoadApplicationDelegate {
 
-    private final ApplicationRepository applicationRepository;
     private final DecisionRepository decisionRepository;
+    private final ReadService readService;
 
-    public LoadApplicationDelegate(ApplicationRepository applicationRepository,
-                                   DecisionRepository decisionRepository) {
-        this.applicationRepository = applicationRepository;
+    public LoadApplicationDelegate(DecisionRepository decisionRepository,
+                                   ReadService readService) {
         this.decisionRepository = decisionRepository;
+        this.readService = readService;
     }
 
     public void loadApplicationData(DelegateExecution execution) {
         Long applicationId = (Long) execution.getVariable("applicationId");
-
-        Application application = applicationRepository.findById(applicationId);
-        if (application == null) {
-            throw new BpmnError("APPLICATION_NOT_FOUND", "Application " + applicationId + " not found");
-        }
+        Application application = readService.getApplicationById(applicationId);
 
         int age = Period.between(application.getPassport().getBirthDate(), LocalDate.now()).getYears();
 
