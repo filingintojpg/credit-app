@@ -373,7 +373,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"filter\": {\r\n        \"statuses\": [\"REJECTED\"],\r\n        \"amount\": 500,\r\n        \"term\": 1,\r\n        \"phone\": 79991111111\r\n    },\r\n    \"pagination\": {\r\n        \"page\": 0,\r\n        \"size\": 2\r\n    }\r\n}",
+              "raw": "{\r\n    \"filter\": {\r\n        \"statuses\": [\"REJECTED\"],\r\n        \"amount\": 500,\r\n        \"term\": 1,\r\n        \"phone\": \"79991111111\"\r\n    },\r\n    \"pagination\": {\r\n        \"page\": 0,\r\n        \"size\": 2\r\n    }\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
