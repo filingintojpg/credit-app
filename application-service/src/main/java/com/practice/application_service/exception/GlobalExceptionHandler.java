@@ -2,6 +2,7 @@ package com.practice.application_service.exception;
 
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.practice.application_service.dto.response.ExceptionResponseDTO;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -28,8 +29,8 @@ public class GlobalExceptionHandler {
         return request != null ? request.getMethod() : "Unknown request method";
     }
 
-    @ExceptionHandler(ApplicationNotFoundException.class)
-    public ResponseEntity<ExceptionResponseDTO> handleNotFound(ApplicationNotFoundException ex, HttpServletRequest request) {
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ExceptionResponseDTO> handleNotFound(EntityNotFoundException ex, HttpServletRequest request) {
         ExceptionResponseDTO response = new ExceptionResponseDTO(
                 HttpStatus.NOT_FOUND.value(),
                 "Not Found",

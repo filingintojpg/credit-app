@@ -6,7 +6,6 @@ import com.practice.application_service.dto.request.CreateApplicationRequestDTO;
 import com.practice.application_service.dto.response.ApplicationDetailsResponseDTO;
 import com.practice.application_service.dto.response.ApplicationStatusResponseDTO;
 import com.practice.application_service.dto.util.Paged;
-import com.practice.application_service.exception.ApplicationNotFoundException;
 import com.practice.application_service.repository.ApplicationFilterRepository;
 import com.practice.common.model.Application;
 import com.practice.common.model.Decision;
@@ -17,6 +16,8 @@ import com.practice.common.repository.ApplicationRepository;
 import com.practice.common.repository.DecisionRepository;
 import com.practice.common.repository.EmploymentRepository;
 import com.practice.common.repository.PassportRepository;
+import com.practice.common.service.CacheService;
+import com.practice.common.service.ReadService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronization;
@@ -34,6 +35,9 @@ public class ApplicationService {
     private final ApplicationFilterRepository applicationFilterRepository;
     private final DecisionRepository decisionRepository;
 
+    private final CacheService cacheService;
+    private final ReadService readService;
+
     private final CamundaClient camundaClient;
 
     public ApplicationService(PassportRepository passportRepository,
@@ -41,12 +45,16 @@ public class ApplicationService {
                               ApplicationRepository applicationRepository,
                               ApplicationFilterRepository applicationFilterRepository,
                               DecisionRepository decisionRepository,
+                              CacheService cacheService,
+                              ReadService readService,
                               CamundaClient camundaClient) {
         this.passportRepository = passportRepository;
         this.employmentRepository = employmentRepository;
         this.applicationRepository = applicationRepository;
         this.applicationFilterRepository = applicationFilterRepository;
         this.decisionRepository = decisionRepository;
+        this.cacheService = cacheService;
+        this.readService = readService;
         this.camundaClient = camundaClient;
     }
 
@@ -87,6 +95,9 @@ public class ApplicationService {
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
             @Override
             public void afterCommit() {
+                cacheService.putApplication(application);
+                cacheService.putDecision(decision);
+
                 camundaClient.startCreditApplicationProcess(application.getId());
             }
         });
@@ -95,15 +106,8 @@ public class ApplicationService {
     }
 
     public ApplicationStatusResponseDTO getStatus(Long applicationId) {
-        Application application = applicationRepository.findById(applicationId);
-
-        if (application == null) {
-            throw new ApplicationNotFoundException(applicationId);
-        }
-
-        Decision decision = decisionRepository.findByApplicationId(applicationId);
+        Decision decision = readService.getDecisionByApplicationId(applicationId);
         String status = decision.getStatus().name();
-
         return new ApplicationStatusResponseDTO(applicationId, status);
     }
 

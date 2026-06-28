@@ -55,7 +55,7 @@ cp .env.example .env && docker-compose up -d --build
         "statuses": ["APPROVED"],
         "amount": 20000,
         "term": 10,
-        "phone": 89965449157
+        "phone": "89965449157"
     },
     "pagination": {
         "page": 2,
